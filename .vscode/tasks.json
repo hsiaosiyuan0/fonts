@@ -1,0 +1,15 @@
+{
+  "version": "0.1.0",
+  "tasks": [
+    {
+      "taskName": "build",
+      "isShellCommand": true,
+      "echoCommand": false,
+      "suppressTaskName": true,
+      "isBuildCommand": true,
+      "isBackground": false,
+      "command": "${workspaceRoot}/node_modules/.bin/gulp",
+      "args": ["build"]
+    }
+  ]
+}

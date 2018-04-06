@@ -1,0 +1,55 @@
+{
+  "name": "fonts",
+  "version": "0.0.1",
+  "description": "Slicing and converting fonts.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsiaosiyuan0/fonts.git"
+  },
+  "keywords": [
+    "font",
+    "slice",
+    "convert",
+    "ttf",
+    "otf",
+    "woff",
+    "minify"
+  ],
+  "author": "hsiaosiyuan0@outlook.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hsiaosiyuan0/fonts/issues"
+  },
+  "homepage": "https://github.com/hsiaosiyuan0/fonts#readme",
+  "devDependencies": {
+    "@types/del": "^3.0.0",
+    "@types/gulp": "^4.0.5",
+    "@types/gulp-sourcemaps": "^0.0.32",
+    "@types/gulp-util": "^3.0.34",
+    "@types/jsonfile": "^4.0.1",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-prettier-plugin": "^1.2.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-tslint": "^8.1.3",
+    "gulp-typescript": "^4.0.1",
+    "gulp-util": "^3.0.8",
+    "jsonfile": "^4.0.0",
+    "prettier": "^1.11.1",
+    "ts-node": "^3.0.2",
+    "tslint": "^5.0.0",
+    "typescript": "^2.7.2",
+    "typescript-register": "^1.1.0",
+    "typescript-require": "^0.2.9-1"
+  },
+  "dependencies": {
+    "@types/node": "^9.4.6"
+  }
+}
