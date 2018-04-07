@@ -1,10 +1,11 @@
+import { ForwardBuffer } from "../forward-buffer";
+import { int16, kSizeofUInt16, uint16, uint24, uint32, uint8 } from "../types";
+import { Table, TableTag } from "./table";
+
 /**
  * thanks [TeX Live](https://www.tug.org/texlive)
  * https://github.com/jjgod/texlive/blob/master/texk/ttfdump/libttf/cmap.c
  */
-import { ForwardBuffer } from "./forward-buffer";
-import { uint8, uint16, uint32, int16, kSizeofUInt16, uint24 } from "./types";
-import { Table, TableTag } from "./table";
 
 export class EncodingRecord {
   platformId: uint16;
@@ -13,25 +14,15 @@ export class EncodingRecord {
 }
 
 export class CmapTable extends Table {
-  private _rb: ForwardBuffer;
-  private _beginOfst: number;
-
   version: uint16;
   numTables: uint16;
   encodingRecords: EncodingRecord[] = [];
 
   subTables: SubTable[] = [];
 
-  constructor(buf: Buffer, offset?: number);
   constructor(buf: Buffer | ForwardBuffer, offset = 0) {
-    super(TableTag.cmap);
-    if (buf instanceof ForwardBuffer) {
-      this._rb = buf;
-      this._beginOfst = buf.offset;
-    } else {
-      this._rb = new ForwardBuffer(buf, offset);
-      this._beginOfst = offset;
-    }
+    super(buf, offset);
+    this.tag = TableTag.cmap;
   }
 
   satisfy() {

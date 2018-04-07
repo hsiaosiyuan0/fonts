@@ -1,4 +1,5 @@
-import { uint8, uint16, uint32, int16, kSizeofUInt16 } from "./types";
+import { uint8, uint16, uint32, int16, kSizeofUInt16 } from "../types";
+import { ForwardBuffer } from "../forward-buffer";
 
 export const tagName2Code = (name: string) => {
   return (
@@ -37,13 +38,24 @@ export enum PlatformId {
 }
 
 export abstract class Table {
+  protected _rb: ForwardBuffer;
+  protected _beginOfst: number;
+
   tag: TableTag;
 
-  constructor(tag: TableTag) {
-    this.tag = tag;
+  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
+    if (buf instanceof ForwardBuffer) {
+      this._rb = buf;
+      this._beginOfst = buf.offset;
+    } else {
+      this._rb = new ForwardBuffer(buf, offset);
+      this._beginOfst = offset;
+    }
   }
 
   as<T>(): T {
     return this as any;
   }
+
+  abstract satisfy(): void;
 }

@@ -2,8 +2,7 @@ import { Font } from "../src/sfnt";
 import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
-import { TableTag } from "../src/table";
-import { CmapTable } from "../src/cmap";
+import { TableTag, CmapTable, HeadTable } from "../src/table";
 // tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
 
@@ -21,4 +20,6 @@ const readFile = promisify(fs.readFile);
   font.tableRecords.forEach(r => console.log(r.tagName));
   const cmap = font.tables.get(TableTag.cmap)!.as<CmapTable>();
   console.log(cmap.subTables);
+  const head = font.tables.get(TableTag.head)!.as<HeadTable>();
+  console.log(head);
 })();

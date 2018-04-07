@@ -1,3 +1,5 @@
+import * as bigInt from "big-integer";
+
 export class ForwardBuffer {
   private _buf: Buffer;
   private _ofst: number;
@@ -37,6 +39,28 @@ export class ForwardBuffer {
     const n = this._buf.readInt16BE(this._ofst);
     this._ofst += 2;
     return n;
+  }
+
+  readInt32BE() {
+    const n = this._buf.readInt32BE(this._ofst);
+    this._ofst += 4;
+    return n;
+  }
+
+  readInt64BE() {
+    const fi32 = this.readInt32BE();
+    const si32 = this.readUInt32BE();
+    return bigInt(fi32)
+      .shiftLeft(32)
+      .or(si32);
+  }
+
+  readUInt64BE() {
+    const fi32 = this.readUInt32BE();
+    const si32 = this.readUInt32BE();
+    return bigInt(fi32)
+      .shiftLeft(32)
+      .or(si32);
   }
 
   forward(cnt: number, wrap = false) {
