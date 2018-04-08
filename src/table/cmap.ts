@@ -1,11 +1,6 @@
 import { ForwardBuffer } from "../forward-buffer";
 import { int16, kSizeofUInt16, uint16, uint24, uint32, uint8 } from "../types";
-import { Table, TableTag } from "./table";
-
-/**
- * thanks [TeX Live](https://www.tug.org/texlive)
- * https://github.com/jjgod/texlive/blob/master/texk/ttfdump/libttf/cmap.c
- */
+import { Table, TableTag, repeat } from "./table";
 
 export class EncodingRecord {
   platformId: uint16;
@@ -140,10 +135,6 @@ export abstract class SubTable {
     this.language = this._rb.readUInt16BE();
   }
 }
-
-const repeat = (times: number, cb: (i: number) => void) => {
-  for (let i = 0; i < times; ++i) cb(i);
-};
 
 // Format 0: Byte encoding table
 // https://docs.microsoft.com/en-us/typography/opentype/spec/cmap#format-0-byte-encoding-table

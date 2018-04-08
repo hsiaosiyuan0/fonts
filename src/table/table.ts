@@ -1,6 +1,10 @@
 import { uint8, uint16, uint32, int16, kSizeofUInt16 } from "../types";
 import { ForwardBuffer } from "../forward-buffer";
 
+/**
+ * thanks [TeX Live](https://www.tug.org/texlive)
+ */
+
 export const tagName2Code = (name: string) => {
   return (
     (name.charCodeAt(0) << 24) |
@@ -59,3 +63,7 @@ export abstract class Table {
 
   abstract satisfy(): void;
 }
+
+export const repeat = (times: number, cb: (i: number) => void) => {
+  for (let i = 0; i < times; ++i) cb(i);
+};

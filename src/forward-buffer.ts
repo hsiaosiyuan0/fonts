@@ -35,6 +35,12 @@ export class ForwardBuffer {
     return n;
   }
 
+  readInt8() {
+    const n = this._buf.readInt8(this._ofst);
+    this._ofst += 1;
+    return n;
+  }
+
   readInt16BE() {
     const n = this._buf.readInt16BE(this._ofst);
     this._ofst += 2;
