@@ -1,6 +1,7 @@
 import { ForwardBuffer } from "./forward-buffer";
 import { CmapTable, Table, TableTag, HeadTable, GlyphTable } from "./table";
 import { uint16, uint32, uint8 } from "./types";
+import { MaxpTable } from "./table/maxp";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -90,6 +91,12 @@ export class Font {
       }
       case TableTag.glyf: {
         const t = new GlyphTable(this._rb.buffer, r.offset);
+        this.tables.set(t.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.maxp: {
+        const t = new MaxpTable(this._rb.buffer, r.offset);
         this.tables.set(t.tag, t);
         t.satisfy();
         break;

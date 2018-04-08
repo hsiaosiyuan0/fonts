@@ -2,7 +2,7 @@ import { Font } from "../src/sfnt";
 import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
-import { TableTag, CmapTable, HeadTable, GlyphTable } from "../src/table";
+import { TableTag, CmapTable, HeadTable, GlyphTable, MaxpTable } from "../src/table";
 // tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
 
@@ -24,4 +24,6 @@ const readFile = promisify(fs.readFile);
   console.log(head);
   const glyph = font.tables.get(TableTag.glyf)!.as<GlyphTable>();
   console.log(glyph);
+  const maxp = font.tables.get(TableTag.maxp)!.as<MaxpTable>();
+  console.log(maxp);
 })();
