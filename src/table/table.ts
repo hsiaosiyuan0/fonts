@@ -32,6 +32,19 @@ export enum TableTag {
   prep = tagName2Code("prep")
 }
 
+export const tableRecordParseOrder = new Map<TableTag, number>();
+tableRecordParseOrder.set(TableTag.name, 1);
+tableRecordParseOrder.set(TableTag.head, 2);
+tableRecordParseOrder.set(TableTag.cmap, 3);
+tableRecordParseOrder.set(TableTag.maxp, 4);
+tableRecordParseOrder.set(TableTag.glyf, 5);
+tableRecordParseOrder.set(TableTag.loca, 6);
+
+export const parseOrderOfTableRecord = (tag: TableTag) => {
+  if (tableRecordParseOrder.has(tag)) return tableRecordParseOrder.get(tag)!;
+  return 100;
+};
+
 export class TableRecord {
   tag: uint32;
   checkSum: uint32;

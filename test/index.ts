@@ -2,7 +2,15 @@ import { Font } from "../src/sfnt";
 import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
-import { TableTag, CmapTable, HeadTable, GlyphTable, MaxpTable, NameTable } from "../src/table";
+import {
+  TableTag,
+  CmapTable,
+  HeadTable,
+  GlyphTable,
+  MaxpTable,
+  NameTable,
+  LocaTable
+} from "../src/table";
 // tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
 
@@ -28,4 +36,6 @@ const readFile = promisify(fs.readFile);
   console.log(maxp);
   const name = font.tables.get(TableTag.name)!.as<NameTable>();
   console.log(name);
+  const loca = font.tables.get(TableTag.loca)!.as<LocaTable>();
+  console.log(loca);
 })();

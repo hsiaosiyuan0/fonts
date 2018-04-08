@@ -1,8 +1,17 @@
 import { ForwardBuffer } from "./forward-buffer";
-import { CmapTable, Table, TableTag, HeadTable, GlyphTable, TableRecord } from "./table";
+import {
+  CmapTable,
+  Table,
+  TableTag,
+  HeadTable,
+  GlyphTable,
+  TableRecord,
+  parseOrderOfTableRecord
+} from "./table";
 import { uint16, uint32, uint8 } from "./types";
 import { MaxpTable } from "./table/maxp";
 import { NameTable } from "./table/name";
+import { LocaTable } from "./table/loca";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -50,6 +59,11 @@ export class Font {
       r.length = this._rb.readUInt32BE();
       this.tableRecords.push(r);
     }
+    this.tableRecords.sort((a, b) => {
+      const oa = parseOrderOfTableRecord(a.tag);
+      const ob = parseOrderOfTableRecord(b.tag);
+      return oa - ob;
+    });
   }
 
   private readTables() {
@@ -72,6 +86,20 @@ export class Font {
       }
       case TableTag.glyf: {
         const t = new GlyphTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.loca: {
+        const maxp = this.tables.get(TableTag.maxp)!.as<MaxpTable>();
+        const head = this.tables.get(TableTag.head)!.as<HeadTable>();
+        const t = new LocaTable(
+          r,
+          this._rb.buffer,
+          r.offset,
+          head.indexToLocFormat,
+          maxp.numGlyphs
+        );
         this.tables.set(r.tag, t);
         t.satisfy();
         break;

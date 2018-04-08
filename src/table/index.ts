@@ -4,3 +4,4 @@ export * from "./head";
 export * from "./glyph";
 export * from "./maxp";
 export * from "./name";
+export * from "./loca";
