@@ -6,3 +6,4 @@ export * from "./maxp";
 export * from "./name";
 export * from "./loca";
 export * from "./hhea";
+export * from "./hmtx";

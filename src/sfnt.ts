@@ -1,18 +1,19 @@
 import { ForwardBuffer } from "./forward-buffer";
 import {
   CmapTable,
-  Table,
-  TableTag,
-  HeadTable,
   GlyphTable,
+  HeadTable,
+  HheaTable,
+  HmtxTable,
+  LocaTable,
+  MaxpTable,
+  NameTable,
+  parseOrderOfTableRecord,
+  Table,
   TableRecord,
-  parseOrderOfTableRecord
+  TableTag
 } from "./table";
 import { uint16, uint32, uint8 } from "./types";
-import { MaxpTable } from "./table/maxp";
-import { NameTable } from "./table/name";
-import { LocaTable } from "./table/loca";
-import { HheaTable } from "./table/hhea";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -119,6 +120,20 @@ export class Font {
       }
       case TableTag.hhea: {
         const t = new HheaTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.hmtx: {
+        const maxp = this.tables.get(TableTag.maxp)!.as<MaxpTable>();
+        const hhea = this.tables.get(TableTag.hhea)!.as<HheaTable>();
+        const t = new HmtxTable(
+          r,
+          this._rb.buffer,
+          r.offset,
+          hhea.numberOfHMetrics,
+          maxp.numGlyphs
+        );
         this.tables.set(r.tag, t);
         t.satisfy();
         break;
