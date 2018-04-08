@@ -41,13 +41,34 @@ export enum PlatformId {
   Custom = 4 as uint16
 }
 
+export class TableRecord {
+  tag: uint32;
+  checkSum: uint32;
+  offset: uint32;
+  length: uint32;
+
+  get tagName() {
+    const c1 = this.tag >> 24;
+    const c2 = (this.tag >> 16) & 0xff;
+    const c3 = (this.tag >> 8) & 0xff;
+    const c4 = this.tag & 0xff;
+    return (
+      String.fromCharCode(c1) +
+      String.fromCharCode(c2) +
+      String.fromCharCode(c3) +
+      String.fromCharCode(c4)
+    );
+  }
+}
+
 export abstract class Table {
   protected _rb: ForwardBuffer;
   protected _beginOfst: number;
 
-  tag: TableTag;
+  record: TableRecord;
 
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
+  constructor(record: TableRecord, buf: Buffer | ForwardBuffer, offset = 0) {
+    this.record = record;
     if (buf instanceof ForwardBuffer) {
       this._rb = buf;
       this._beginOfst = buf.offset;

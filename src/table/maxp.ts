@@ -19,11 +19,6 @@ export class MaxpTable extends Table {
   maxComponentElements: uint16;
   maxComponentDepth: uint16;
 
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
-    super(buf, offset);
-    this.tag = TableTag.maxp;
-  }
-
   satisfy() {
     this.version = this._rb.readUInt32BE();
     this.numGlyphs = this._rb.readUInt16BE();

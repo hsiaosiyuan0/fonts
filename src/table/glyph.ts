@@ -64,11 +64,6 @@ export class GlyphTable extends Table {
   simpleGlyphTable: SimpleGlyphTable;
   compositeGlyphTables: CompositeGlyphTable[] = [];
 
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
-    super(buf, offset);
-    this.tag = TableTag.glyf;
-  }
-
   satisfy() {
     this.numberOfContours = this._rb.readInt16BE();
     this.xMin = this._rb.readInt16BE();

@@ -1,7 +1,8 @@
 import { ForwardBuffer } from "./forward-buffer";
-import { CmapTable, Table, TableTag, HeadTable, GlyphTable } from "./table";
+import { CmapTable, Table, TableTag, HeadTable, GlyphTable, TableRecord } from "./table";
 import { uint16, uint32, uint8 } from "./types";
 import { MaxpTable } from "./table/maxp";
+import { NameTable } from "./table/name";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -9,26 +10,6 @@ export class OffsetTable {
   searchRange: uint16;
   entrySelector: uint16;
   rangeShift: uint16;
-}
-
-export class TableRecord {
-  tag: uint32;
-  checkSum: uint32;
-  offset: uint32;
-  length: uint32;
-
-  get tagName() {
-    const c1 = this.tag >> 24;
-    const c2 = (this.tag >> 16) & 0xff;
-    const c3 = (this.tag >> 8) & 0xff;
-    const c4 = this.tag & 0xff;
-    return (
-      String.fromCharCode(c1) +
-      String.fromCharCode(c2) +
-      String.fromCharCode(c3) +
-      String.fromCharCode(c4)
-    );
-  }
 }
 
 export class Font {
@@ -78,26 +59,32 @@ export class Font {
   private readTable(r: TableRecord) {
     switch (r.tag) {
       case TableTag.cmap: {
-        const t = new CmapTable(this._rb.buffer, r.offset);
+        const t = new CmapTable(r, this._rb.buffer, r.offset);
         this.tables.set(r.tag, t);
         t.satisfy();
         break;
       }
       case TableTag.head: {
-        const t = new HeadTable(this._rb.buffer, r.offset);
-        this.tables.set(t.tag, t);
+        const t = new HeadTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
         t.satisfy();
         break;
       }
       case TableTag.glyf: {
-        const t = new GlyphTable(this._rb.buffer, r.offset);
-        this.tables.set(t.tag, t);
+        const t = new GlyphTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
         t.satisfy();
         break;
       }
       case TableTag.maxp: {
-        const t = new MaxpTable(this._rb.buffer, r.offset);
-        this.tables.set(t.tag, t);
+        const t = new MaxpTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.name: {
+        const t = new NameTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
         t.satisfy();
         break;
       }

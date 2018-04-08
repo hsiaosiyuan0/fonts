@@ -1,6 +1,6 @@
 import { ForwardBuffer } from "../forward-buffer";
 import { int16, kSizeofUInt16, uint16, uint24, uint32, uint8 } from "../types";
-import { Table, TableTag, repeat } from "./table";
+import { Table, TableTag, repeat, TableRecord } from "./table";
 
 export class EncodingRecord {
   platformId: uint16;
@@ -14,11 +14,6 @@ export class CmapTable extends Table {
   encodingRecords: EncodingRecord[] = [];
 
   subTables: SubTable[] = [];
-
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
-    super(buf, offset);
-    this.tag = TableTag.cmap;
-  }
 
   satisfy() {
     this.readHead();

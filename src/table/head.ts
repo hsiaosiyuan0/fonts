@@ -23,11 +23,6 @@ export class HeadTable extends Table {
   indexToLocFormat: int16;
   glyphDataFormat: int16;
 
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
-    super(buf, offset);
-    this.tag = TableTag.head;
-  }
-
   satisfy() {
     this.majorVersion = this._rb.readUInt16BE();
     this.minorVersion = this._rb.readUInt16BE();
