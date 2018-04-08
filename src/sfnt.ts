@@ -31,7 +31,6 @@ export class Font {
 
   tables = new Map<TableTag, Table>();
 
-  constructor(buf: Buffer, offset?: number);
   constructor(buf: Buffer | ForwardBuffer, offset = 0) {
     this._rb = buf instanceof ForwardBuffer ? buf : new ForwardBuffer(buf, offset);
   }
