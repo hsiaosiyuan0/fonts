@@ -32,15 +32,6 @@ export enum TableTag {
   prep = tagName2Code("prep")
 }
 
-export enum PlatformId {
-  // just a code as comment style
-  Unicode = 0 as uint16,
-  Macintosh = 1 as uint16,
-  ISO = 2 as uint16,
-  Windows = 3 as uint16,
-  Custom = 4 as uint16
-}
-
 export class TableRecord {
   tag: uint32;
   checkSum: uint32;
