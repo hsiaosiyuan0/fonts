@@ -39,6 +39,8 @@ tableRecordParseOrder.set(TableTag.cmap, 3);
 tableRecordParseOrder.set(TableTag.maxp, 4);
 tableRecordParseOrder.set(TableTag.glyf, 5);
 tableRecordParseOrder.set(TableTag.loca, 6);
+tableRecordParseOrder.set(TableTag.hhea, 7);
+tableRecordParseOrder.set(TableTag.hmtx, 8);
 
 export const parseOrderOfTableRecord = (tag: TableTag) => {
   if (tableRecordParseOrder.has(tag)) return tableRecordParseOrder.get(tag)!;

@@ -12,6 +12,7 @@ import { uint16, uint32, uint8 } from "./types";
 import { MaxpTable } from "./table/maxp";
 import { NameTable } from "./table/name";
 import { LocaTable } from "./table/loca";
+import { HheaTable } from "./table/hhea";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -112,6 +113,12 @@ export class Font {
       }
       case TableTag.name: {
         const t = new NameTable(r, this._rb.buffer, r.offset);
+        this.tables.set(r.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.hhea: {
+        const t = new HheaTable(r, this._rb.buffer, r.offset);
         this.tables.set(r.tag, t);
         t.satisfy();
         break;

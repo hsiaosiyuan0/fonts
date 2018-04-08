@@ -9,7 +9,8 @@ import {
   GlyphTable,
   MaxpTable,
   NameTable,
-  LocaTable
+  LocaTable,
+  HheaTable
 } from "../src/table";
 // tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
@@ -38,4 +39,6 @@ const readFile = promisify(fs.readFile);
   console.log(name);
   const loca = font.tables.get(TableTag.loca)!.as<LocaTable>();
   console.log(loca);
+  const hhea = font.tables.get(TableTag.hhea)!.as<HheaTable>();
+  console.log(hhea);
 })();
