@@ -194,7 +194,7 @@ export class SubTableF2 extends SubTable {
     const header = this.subHeaders[key / 8];
     if (header.firstCode <= second && second < header.firstCode + header.entryCount) {
       const idx = this.glyphIndexArray[second - header.firstCode + header.idRangeStartIdx];
-      if (idx !== 0) return idx + header.idDelta;
+      if (idx !== 0) return (idx + header.idDelta) & 0xffff;
     }
     return 0;
   }
