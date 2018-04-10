@@ -129,6 +129,8 @@ export abstract class SubTable {
     this.length = this._rb.readUInt16BE();
     this.language = this._rb.readUInt16BE();
   }
+
+  abstract lookup(cc: number): number;
 }
 
 // Format 0: Byte encoding table
@@ -143,6 +145,10 @@ export class SubTableF0 extends SubTable {
   satisfy() {
     super.satisfy();
     repeat(256, () => this.glyphIdxArray.push(this._rb.readUInt8()));
+  }
+
+  lookup(cc: number) {
+    return this.glyphIdxArray[cc & 0x00ff];
   }
 }
 
@@ -179,6 +185,18 @@ export class SubTableF2 extends SubTable {
     this.readSubHeaderKeys();
     this.readSubHeaders();
     this.readGlyphIndexArray();
+  }
+
+  lookup(cc: number) {
+    const first = cc >>> 8;
+    const second = cc & 0x00ff;
+    const key = this.subHeaderKeys[first];
+    const header = this.subHeaders[key / 8];
+    if (header.firstCode <= second && second < header.firstCode + header.entryCount) {
+      const idx = this.glyphIndexArray[second - header.firstCode + header.idRangeStartIdx];
+      if (idx !== 0) return idx + header.idDelta;
+    }
+    return 0;
   }
 
   private readSubHeaderKeys() {
@@ -241,18 +259,35 @@ export class SubTableF4 extends SubTable {
     this.readGlyphIdArray();
   }
 
+  lookup(cc: uint16) {
+    let idx = 0;
+    for (let i = 0, len = this.segCountX2 / 2; i < len; ++i) {
+      if (cc <= this.endCount[i] && cc >= this.startCount[i]) {
+        if (this.idRangeOffset[i] === 0) {
+          idx = cc + this.idDelta[i];
+          break;
+        }
+
+        const startIdx = (this.idRangeOffset[i] - (len - i) * kSizeofUInt16) / kSizeofUInt16;
+        idx = cc - this.startCount[i] + startIdx;
+        if (idx === 0) idx = idx + this.idDelta[i];
+      }
+    }
+    return idx & 0xffff;
+  }
+
   private readHeader() {
-    this.segCountX2 = this._rb.readInt16BE();
-    this.searchRange = this._rb.readInt16BE();
-    this.entrySelector = this._rb.readInt16BE();
+    this.segCountX2 = this._rb.readUInt16BE();
+    this.searchRange = this._rb.readUInt16BE();
+    this.entrySelector = this._rb.readUInt16BE();
     this.rangeShift = this._rb.readInt16BE();
   }
 
   private readSegments() {
     const segCount = this.segCountX2 / 2;
-    repeat(segCount, () => this.endCount.push(this._rb.readInt16BE()));
-    this.reservedPad = this._rb.readInt16BE();
-    repeat(segCount, () => this.startCount.push(this._rb.readInt16BE()));
+    repeat(segCount, () => this.endCount.push(this._rb.readUInt16BE()));
+    this.reservedPad = this._rb.readUInt16BE();
+    repeat(segCount, () => this.startCount.push(this._rb.readUInt16BE()));
     repeat(segCount, () => this.idDelta.push(this._rb.readInt16BE()));
     repeat(segCount, () => this.idRangeOffset.push(this._rb.readUInt16BE()));
   }
@@ -279,6 +314,12 @@ export class SubTableF6 extends SubTable {
     this.firstCode = this._rb.readUInt16BE();
     this.entryCount = this._rb.readUInt16BE();
     repeat(this.entryCount, () => this.glyphIdArray.push(this._rb.readUInt16BE()));
+  }
+
+  lookup(cc: number) {
+    const idx = cc - this.firstCode;
+    if (idx < this.entryCount) return this.glyphIdArray[idx];
+    return 0;
   }
 }
 
@@ -311,6 +352,16 @@ export class SubTableF8 extends SubTable {
       this.groups.push(s);
     });
   }
+
+  lookup(cc: number) {
+    for (let i = 0, len = this.groups.length; i < len; ++i) {
+      const g = this.groups[i];
+      if (cc >= g.startCharCode && cc <= g.endCharCode) {
+        return cc - g.startCharCode + g.startGlyphID;
+      }
+    }
+    return 0;
+  }
 }
 
 export class SubTableF10 extends SubTable {
@@ -327,6 +378,12 @@ export class SubTableF10 extends SubTable {
     this.startCharCode = this._rb.readUInt32BE();
     this.numChars = this._rb.readUInt32BE();
     repeat(this.numChars, () => this.glyphs.push(this._rb.readUInt16BE()));
+  }
+
+  lookup(cc: number) {
+    const idx = cc - this.startCharCode;
+    if (idx < this.numChars) return this.glyphs[idx];
+    return 0;
   }
 }
 
@@ -350,6 +407,16 @@ export class SubTableF12 extends SubTable {
       s.startGlyphID = this._rb.readUInt32BE();
       this.groups.push(s);
     });
+  }
+
+  lookup(cc: number) {
+    for (let i = 0, len = this.groups.length; i < len; ++i) {
+      const g = this.groups[i];
+      if (cc >= g.startCharCode && cc <= g.endCharCode) {
+        return cc - g.startCharCode + g.startGlyphID;
+      }
+    }
+    return 0;
   }
 }
 
@@ -379,6 +446,16 @@ export class SubTableF13 extends SubTable {
       c.glyphID = this._rb.readUInt32BE();
       this.groups.push(c);
     });
+  }
+
+  lookup(cc: number) {
+    for (let i = 0, len = this.groups.length; i < len; ++i) {
+      const g = this.groups[i];
+      if (cc >= g.startCharCode && cc <= g.endCharCode) {
+        return g.glyphID;
+      }
+    }
+    return 0;
   }
 }
 
@@ -423,7 +500,7 @@ export class VariationSelector {
     this.readNonDefaultUVS();
   }
 
-  readDefaultUVS() {
+  private readDefaultUVS() {
     const buf = this._rb.branch();
     buf.advance(this.defaultUVSOffset);
     const d = new DefaultUVS();
@@ -439,7 +516,7 @@ export class VariationSelector {
     });
   }
 
-  readNonDefaultUVS() {
+  private readNonDefaultUVS() {
     const buf = this._rb.branch();
     buf.advance(this.nonDefaultUVSOffset);
     const d = new NonDefaultUVS();
@@ -481,5 +558,9 @@ export class SubTableF14 extends SubTable {
       v.satisfy();
       this.varSelector.push(v);
     });
+  }
+
+  lookup(cc: number) {
+    return 0;
   }
 }

@@ -47,4 +47,8 @@ const readFile = promisify(fs.readFile);
   console.log(hmtx);
   const post = font.tables.get(TableTag.post)!.as<PostTable>();
   console.log(post);
+
+  const f4 = cmap.subTables.filter(t => t.format === 4)[0];
+  console.log(f4.lookup("백".codePointAt(0)!));
+  console.log(f4.lookup("송".codePointAt(0)!));
 })();
