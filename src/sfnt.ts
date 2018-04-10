@@ -11,7 +11,8 @@ import {
   parseOrderOfTableRecord,
   Table,
   TableRecord,
-  TableTag
+  TableTag,
+  PostTable
 } from "./table";
 import { uint16, uint32, uint8 } from "./types";
 
@@ -133,6 +134,12 @@ export class Font {
           hhea.numberOfHMetrics,
           maxp.numGlyphs
         );
+        this.tables.set(r.tag, t);
+        t.satisfy();
+        break;
+      }
+      case TableTag.post: {
+        const t = new PostTable(r, this._rb.buffer, r.offset);
         this.tables.set(r.tag, t);
         t.satisfy();
         break;
