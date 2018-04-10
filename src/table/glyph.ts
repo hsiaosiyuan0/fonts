@@ -54,7 +54,7 @@ export class CompositeGlyphTable {
   transOpt: TransformationOpt;
 }
 
-export class GlyphTable extends Table {
+export class Glyph {
   numberOfContours: int16;
   xMin: int16;
   yMin: int16;
@@ -63,31 +63,21 @@ export class GlyphTable extends Table {
 
   simpleGlyphTable: SimpleGlyphTable;
   compositeGlyphTables: CompositeGlyphTable[] = [];
+}
 
-  satisfy() {
-    this.numberOfContours = this._rb.readInt16BE();
-    this.xMin = this._rb.readInt16BE();
-    this.yMin = this._rb.readInt16BE();
-    this.xMax = this._rb.readInt16BE();
-    this.yMax = this._rb.readInt16BE();
+export class GlyphTable extends Table {
+  satisfy() {}
 
-    if (this.numberOfContours > 0) {
-      this.readSimpleGlyphTable();
-    } else {
-      this.readCompositeGlyphTable();
-    }
-  }
-
-  readSimpleGlyphTable() {
+  readSimpleGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
     const t = new SimpleGlyphTable();
-    repeat(this.numberOfContours, () => t.endPtsOfContours.push(this._rb.readUInt16BE()));
+    repeat(glyph.numberOfContours, () => t.endPtsOfContours.push(rb.readUInt16BE()));
 
-    t.instructionLength = this._rb.readUInt16BE();
-    repeat(t.instructionLength, () => t.instructions.push(this._rb.readUInt8()));
+    t.instructionLength = rb.readUInt16BE();
+    repeat(t.instructionLength, () => t.instructions.push(rb.readUInt8()));
 
-    const pointCount = t.endPtsOfContours[this.numberOfContours - 1] + 1;
+    const pointCount = t.endPtsOfContours[glyph.numberOfContours - 1] + 1;
     for (let i = 0; i < pointCount; ++i) {
-      const f = this._rb.readUInt8();
+      const f = rb.readUInt8();
       t.flags.push(f);
 
       if (f & SimpleGlyphFlag.REPEAT_FLAG) {
@@ -103,7 +93,7 @@ export class GlyphTable extends Table {
     for (let i = 0; i < pointCount; ++i) {
       const f = t.flags[i];
       if (f & SimpleGlyphFlag.X_SHORT_VECTOR) {
-        let x = this._rb.readUInt8();
+        let x = rb.readUInt8();
         if (~f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
           x = -x;
         }
@@ -112,7 +102,7 @@ export class GlyphTable extends Table {
         if (f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
           t.xCoordinates.push(0);
         } else {
-          t.xCoordinates.push(this._rb.readInt16BE());
+          t.xCoordinates.push(rb.readInt16BE());
         }
       }
     }
@@ -120,7 +110,7 @@ export class GlyphTable extends Table {
     for (let i = 0; i < pointCount; ++i) {
       const f = t.flags[i];
       if (f & SimpleGlyphFlag.Y_SHORT_VECTOR) {
-        let x = this._rb.readUInt8();
+        let x = rb.readUInt8();
         if (~f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
           x = -x;
         }
@@ -129,54 +119,71 @@ export class GlyphTable extends Table {
         if (f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
           t.yCoordinates.push(0);
         } else {
-          t.yCoordinates.push(this._rb.readInt16BE());
+          t.yCoordinates.push(rb.readInt16BE());
         }
       }
     }
 
-    this.simpleGlyphTable = t;
+    glyph.simpleGlyphTable = t;
   }
 
-  readCompositeGlyphTable() {
+  readCompositeGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
     while (true) {
       const t = new CompositeGlyphTable();
-      t.flags = this._rb.readUInt16BE();
-      t.glyphIndex = this._rb.readUInt16BE();
+      t.flags = rb.readUInt16BE();
+      t.glyphIndex = rb.readUInt16BE();
 
       if (t.flags & CompositeGlyphFlags.ARG_1_AND_2_ARE_WORDS) {
         if (t.flags & CompositeGlyphFlags.ARGS_ARE_XY_VALUES) {
-          t.argument1 = this._rb.readInt16BE();
-          t.argument2 = this._rb.readInt16BE();
+          t.argument1 = rb.readInt16BE();
+          t.argument2 = rb.readInt16BE();
         } else {
-          t.argument1 = this._rb.readUInt16BE();
-          t.argument2 = this._rb.readUInt16BE();
+          t.argument1 = rb.readUInt16BE();
+          t.argument2 = rb.readUInt16BE();
         }
       } else {
         if (t.flags & CompositeGlyphFlags.ARGS_ARE_XY_VALUES) {
-          t.argument1 = this._rb.readInt8();
-          t.argument2 = this._rb.readInt8();
+          t.argument1 = rb.readInt8();
+          t.argument2 = rb.readInt8();
         } else {
-          t.argument1 = this._rb.readUInt8();
-          t.argument2 = this._rb.readUInt8();
+          t.argument1 = rb.readUInt8();
+          t.argument2 = rb.readUInt8();
         }
       }
 
       const transOpt = new TransformationOpt();
       if (t.flags & CompositeGlyphFlags.WE_HAVE_A_SCALE) {
-        transOpt.scale = this._rb.readInt16BE();
+        transOpt.scale = rb.readInt16BE();
       } else if (t.flags & CompositeGlyphFlags.WE_HAVE_AN_X_AND_Y_SCALE) {
-        transOpt.xScale = this._rb.readInt16BE();
-        transOpt.yScale = this._rb.readInt16BE();
+        transOpt.xScale = rb.readInt16BE();
+        transOpt.yScale = rb.readInt16BE();
       } else if (t.flags & CompositeGlyphFlags.WE_HAVE_A_TWO_BY_TWO) {
-        transOpt.xScale = this._rb.readInt16BE();
-        transOpt.scale01 = this._rb.readInt16BE();
-        transOpt.scale10 = this._rb.readInt16BE();
-        transOpt.yScale = this._rb.readInt16BE();
+        transOpt.xScale = rb.readInt16BE();
+        transOpt.scale01 = rb.readInt16BE();
+        transOpt.scale10 = rb.readInt16BE();
+        transOpt.yScale = rb.readInt16BE();
       }
 
-      this.compositeGlyphTables.push(t);
+      glyph.compositeGlyphTables.push(t);
 
       if (~t.flags & CompositeGlyphFlags.MORE_COMPONENTS) break;
     }
+  }
+
+  readGlyphAt(offset: number) {
+    const rb = this._rb.branch(this.record.offset + offset);
+    const g = new Glyph();
+    g.numberOfContours = this._rb.readInt16BE();
+    g.xMin = this._rb.readInt16BE();
+    g.yMin = this._rb.readInt16BE();
+    g.xMax = this._rb.readInt16BE();
+    g.yMax = this._rb.readInt16BE();
+
+    if (g.numberOfContours > 0) {
+      this.readSimpleGlyphTable(g, rb);
+    } else {
+      this.readCompositeGlyphTable(g, rb);
+    }
+    return g;
   }
 }
