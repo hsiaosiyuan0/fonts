@@ -49,6 +49,11 @@ const readFile = promisify(fs.readFile);
   console.log(post);
 
   const f4 = cmap.subTables.filter(t => t.format === 4)[0];
-  console.log(f4.lookup("백".codePointAt(0)!));
-  console.log(f4.lookup("송".codePointAt(0)!));
+  const gIdx1 = f4.lookup("백".codePointAt(0)!);
+  const gIdx2 = f4.lookup("송".codePointAt(0)!);
+  console.log(gIdx1);
+  console.log(gIdx2);
+  const ofst1 = loca.idx2offset(gIdx1);
+  const g = glyph.readGlyphAt(ofst1);
+  console.log(g);
 })();

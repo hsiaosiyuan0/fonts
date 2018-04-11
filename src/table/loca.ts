@@ -29,4 +29,8 @@ export class LocaTable extends Table {
       throw new Error("unreachable");
     }
   }
+
+  idx2offset(idx: number) {
+    return this.offsets[idx];
+  }
 }

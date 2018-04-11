@@ -68,7 +68,7 @@ export class Glyph {
 export class GlyphTable extends Table {
   satisfy() {}
 
-  readSimpleGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
+  private readSimpleGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
     const t = new SimpleGlyphTable();
     repeat(glyph.numberOfContours, () => t.endPtsOfContours.push(rb.readUInt16BE()));
 
@@ -81,7 +81,7 @@ export class GlyphTable extends Table {
       t.flags.push(f);
 
       if (f & SimpleGlyphFlag.REPEAT_FLAG) {
-        let times = this._rb.readUInt8();
+        let times = rb.readUInt8();
         while (times) {
           t.flags.push(f);
           --times;
@@ -127,7 +127,7 @@ export class GlyphTable extends Table {
     glyph.simpleGlyphTable = t;
   }
 
-  readCompositeGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
+  private readCompositeGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
     while (true) {
       const t = new CompositeGlyphTable();
       t.flags = rb.readUInt16BE();
@@ -173,11 +173,11 @@ export class GlyphTable extends Table {
   readGlyphAt(offset: number) {
     const rb = this._rb.branch(this.record.offset + offset);
     const g = new Glyph();
-    g.numberOfContours = this._rb.readInt16BE();
-    g.xMin = this._rb.readInt16BE();
-    g.yMin = this._rb.readInt16BE();
-    g.xMax = this._rb.readInt16BE();
-    g.yMax = this._rb.readInt16BE();
+    g.numberOfContours = rb.readInt16BE();
+    g.xMin = rb.readInt16BE();
+    g.yMin = rb.readInt16BE();
+    g.xMax = rb.readInt16BE();
+    g.yMax = rb.readInt16BE();
 
     if (g.numberOfContours > 0) {
       this.readSimpleGlyphTable(g, rb);
