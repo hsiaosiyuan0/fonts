@@ -15,6 +15,7 @@ export const tagName2Code = (name: string) => {
 };
 
 export enum TableTag {
+  raw = tagName2Code("raw"),
   cmap = tagName2Code("cmap"),
   glyf = tagName2Code("glyf"),
   head = tagName2Code("head"),

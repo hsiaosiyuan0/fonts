@@ -24,6 +24,15 @@ export class OffsetTable {
   rangeShift: uint16;
 }
 
+export class RawTable extends Table {
+  bytes: Buffer;
+
+  satisfy() {
+    const { offset, length } = this.record;
+    this.bytes = this._rb.buffer.slice(offset, offset + length);
+  }
+}
+
 export class Font {
   private _rb: ForwardBuffer;
 
@@ -31,6 +40,7 @@ export class Font {
   tableRecords: TableRecord[] = [];
 
   tables = new Map<TableTag, Table>();
+  rawTables: RawTable[] = [];
 
   constructor(buf: Buffer | ForwardBuffer, offset = 0) {
     this._rb = buf instanceof ForwardBuffer ? buf : new ForwardBuffer(buf, offset);
@@ -145,6 +155,9 @@ export class Font {
         break;
       }
       default:
+        const t = new RawTable(r, this._rb.buffer, r.offset);
+        this.rawTables.push(t);
+        t.satisfy();
         break;
     }
   }
