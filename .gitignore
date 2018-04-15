@@ -24,3 +24,5 @@ yarn-error.log*
 .idea
 .awcache
 *.class
+
+test/*dump.txt

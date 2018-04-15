@@ -1,6 +1,8 @@
-import { ForwardBuffer } from "./forward-buffer";
+import * as assert from "assert";
 import {
   CmapTable,
+  EncodingRecord,
+  Glyph,
   GlyphTable,
   HeadTable,
   HheaTable,
@@ -9,12 +11,14 @@ import {
   MaxpTable,
   NameTable,
   parseOrderOfTableRecord,
+  PostTable,
+  SubTableF12,
   Table,
   TableRecord,
-  TableTag,
-  PostTable
+  TableTag
 } from "./table";
-import { uint16, uint32, uint8 } from "./types";
+import { kSizeofUInt16, kSizeofUInt32, uint16, uint32, uint8 } from "./types";
+import { BufferWriter, ForwardBuffer } from "./util";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -22,14 +26,40 @@ export class OffsetTable {
   searchRange: uint16;
   entrySelector: uint16;
   rangeShift: uint16;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt32(this.sfntVersion);
+    wb.writeUInt16(this.numTables);
+    wb.writeUInt16(this.searchRange);
+    wb.writeUInt16(this.entrySelector);
+    wb.writeInt16(this.rangeShift);
+  }
+
+  static kSize = kSizeofUInt32 + 4 * kSizeofUInt16;
 }
 
 export class RawTable extends Table {
   bytes: Buffer;
 
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    super(record, buf, offset);
+    if (!this.record) {
+      this.record = new TableRecord(TableTag.raw);
+    }
+  }
+
   satisfy() {
     const { offset, length } = this.record;
     this.bytes = this._rb.buffer.slice(offset, offset + length);
+  }
+
+  write2(wb: BufferWriter) {
+    super.write2(wb);
+    wb.write(this.bytes);
+  }
+
+  size() {
+    return this.bytes.length;
   }
 }
 
@@ -42,7 +72,10 @@ export class Font {
   tables = new Map<TableTag, Table>();
   rawTables: RawTable[] = [];
 
-  constructor(buf: Buffer | ForwardBuffer, offset = 0) {
+  constructor();
+  constructor(buf: Buffer | ForwardBuffer, offset?: number);
+  constructor(buf?: Buffer | ForwardBuffer, offset = 0) {
+    if (!buf) return;
     this._rb = buf instanceof ForwardBuffer ? buf : new ForwardBuffer(buf, offset);
   }
 
@@ -50,6 +83,58 @@ export class Font {
     this.readOffsetTable();
     this.readTableRecords();
     this.readTables();
+  }
+
+  updateOffsetTable(numTables: number) {
+    if (!this.offsetTable) {
+      this.offsetTable = new OffsetTable();
+      this.offsetTable.sfntVersion = 0x00010000;
+    }
+    this.offsetTable.numTables = numTables;
+    // checkout https://www.geeksforgeeks.org/highest-power-2-less-equal-given-number
+    const mp2 = Math.pow(2, Math.floor(Math.log2(numTables)));
+    this.offsetTable.searchRange = mp2 * 16;
+    this.offsetTable.entrySelector = Math.log2(mp2);
+    this.offsetTable.rangeShift = numTables * 16 - this.offsetTable.searchRange;
+  }
+
+  write2(wb: BufferWriter) {
+    const tables = Array.from(this.tables.values()).concat(this.rawTables);
+    tables.sort((a, b) => {
+      return a.record.tag - b.record.tag;
+    });
+    const len = tables.length;
+    this.updateOffsetTable(len);
+    this.offsetTable.write2(wb);
+    tables.forEach((t, i) => {
+      // calc byte size
+      t.size();
+      if (i === 0) {
+        t.record.offset = OffsetTable.kSize + len * TableRecord.kSize;
+      } else {
+        const prev = tables[i - 1];
+        t.record.offset = prev.record.offset + prev.record.length;
+      }
+      const delta = t.record.offset & 3;
+      if (delta !== 0) {
+        const padding = 4 - delta;
+        t.record.offset += padding;
+        t.record.padding = padding;
+      }
+      t.record.write2(wb);
+    });
+    tables.forEach(t => {
+      const { tagName, offset, padding, length } = t.record;
+      const msg = `
+  tagName: ${tagName}
+  offset: ${offset}
+  padding: ${padding}
+  length: ${length}
+  wbLength: ${wb.length}
+  `;
+      assert.ok(t.record.offset === wb.length + t.record.padding, msg);
+      t.write2(wb);
+    });
   }
 
   private readOffsetTable() {

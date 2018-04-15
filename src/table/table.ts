@@ -1,5 +1,5 @@
-import { uint8, uint16, uint32, int16, kSizeofUInt16 } from "../types";
-import { ForwardBuffer } from "../forward-buffer";
+import { uint8, uint16, uint32, int16, kSizeofUInt16, kSizeofUInt32 } from "../types";
+import { ForwardBuffer, BufferWriter } from "../util";
 
 /**
  * thanks [TeX Live](https://www.tug.org/texlive)
@@ -54,6 +54,15 @@ export class TableRecord {
   offset: uint32;
   length: uint32;
 
+  padding = 0;
+
+  constructor(tag = TableTag.raw, checkSum = 0, offset = 0, length = 0) {
+    this.tag = tag;
+    this.checkSum = checkSum;
+    this.offset = offset;
+    this.length = length;
+  }
+
   get tagName() {
     const c1 = this.tag >> 24;
     const c2 = (this.tag >> 16) & 0xff;
@@ -66,6 +75,22 @@ export class TableRecord {
       String.fromCharCode(c4)
     );
   }
+
+  static kSize = kSizeofUInt32 * 4;
+
+  write2(wb: BufferWriter) {
+    const c1 = this.tag >> 24;
+    const c2 = (this.tag >> 16) & 0xff;
+    const c3 = (this.tag >> 8) & 0xff;
+    const c4 = this.tag & 0xff;
+    wb.writeUInt8(c1);
+    wb.writeUInt8(c2);
+    wb.writeUInt8(c3);
+    wb.writeUInt8(c4);
+    wb.writeUInt32(this.checkSum);
+    wb.writeUInt32(this.offset);
+    wb.writeUInt32(this.length);
+  }
 }
 
 export abstract class Table {
@@ -74,7 +99,8 @@ export abstract class Table {
 
   record: TableRecord;
 
-  constructor(record: TableRecord, buf: Buffer | ForwardBuffer, offset = 0) {
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    if (!record || !buf) return;
     this.record = record;
     if (buf instanceof ForwardBuffer) {
       this._rb = buf;
@@ -90,6 +116,16 @@ export abstract class Table {
   }
 
   abstract satisfy(): void;
+
+  write2(wb: BufferWriter) {
+    if (this.record.padding) {
+      for (let i = 0, len = this.record.padding; i < len; ++i) {
+        wb.writeUInt8(0);
+      }
+    }
+  }
+
+  abstract size(): number;
 }
 
 export const repeat = (times: number, cb: (i: number) => void) => {

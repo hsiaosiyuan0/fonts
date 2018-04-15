@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": ">=9.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,15 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/hsiaosiyuan0/fonts.git"
   },
-  "keywords": [
-    "font",
-    "slice",
-    "convert",
-    "ttf",
-    "otf",
-    "woff",
-    "minify"
-  ],
+  "keywords": ["font", "slice", "convert", "ttf", "otf", "woff", "minify"],
   "author": "hsiaosiyuan0@outlook.com",
   "license": "MIT",
   "bugs": {

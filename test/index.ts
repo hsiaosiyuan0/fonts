@@ -1,25 +1,29 @@
-import { Font } from "../src/sfnt";
-import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
-import {
-  TableTag,
-  CmapTable,
-  HeadTable,
-  GlyphTable,
-  MaxpTable,
-  NameTable,
-  LocaTable,
-  HheaTable,
-  HmtxTable,
-  PostTable
-} from "../src/table";
 // tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
+import { promisify } from "util";
+import {
+  CmapTable,
+  Font,
+  GlyphTable,
+  HeadTable,
+  HheaTable,
+  HmtxTable,
+  LocaTable,
+  MaxpTable,
+  NameTable,
+  PostTable,
+  TableTag,
+  BufferWriter,
+  Minifier
+} from "../src";
 
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+
 (async () => {
-  const buf = await readFile(path.resolve(__dirname, "UnBom.ttf"));
+  const buf = await readFile(path.resolve(__dirname, "王羲之书法字体.ttf"));
 
   performance.mark("font.satisfy.begin");
   const font = new Font(buf);
@@ -48,12 +52,12 @@ const readFile = promisify(fs.readFile);
   const post = font.tables.get(TableTag.post)!.as<PostTable>();
   console.log(post);
 
-  const f4 = cmap.subTables.filter(t => t.format === 4)[0];
-  const gIdx1 = f4.lookup("백".codePointAt(0)!);
-  const gIdx2 = f4.lookup("송".codePointAt(0)!);
-  console.log(gIdx1);
-  console.log(gIdx2);
-  const ofst1 = loca.idx2offset(gIdx1);
-  const g = glyph.readGlyphAt(ofst1);
-  console.log(g);
+  const mini = new Minifier();
+  const newFont = mini.filter(font, "王羲之书法字体");
+  console.log(newFont);
+
+  const f = path.resolve(__dirname, "..", "..", "test", `test.ttf`);
+  const wb = new BufferWriter();
+  newFont.write2(wb);
+  writeFile(f, wb.buffer);
 })();

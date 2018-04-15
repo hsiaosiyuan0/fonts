@@ -1,7 +1,15 @@
-import { ForwardBuffer } from "../forward-buffer";
-import { Table, TableTag } from "./table";
-import { uint16, int32, uint32, int16 } from "../types";
 import * as bigInt from "big-integer";
+import {
+  int16,
+  int32,
+  kSizeofUInt16,
+  kSizeofUInt32,
+  kSizeofUInt64,
+  uint16,
+  uint32
+} from "../types";
+import { BufferWriter, ForwardBuffer } from "../util";
+import { Table, TableTag, TableRecord } from "./table";
 
 export class HeadTable extends Table {
   majorVersion: uint16;
@@ -23,6 +31,13 @@ export class HeadTable extends Table {
   indexToLocFormat: int16;
   glyphDataFormat: int16;
 
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    super(record, buf, offset);
+    if (!this.record) {
+      this.record = new TableRecord(TableTag.head);
+    }
+  }
+
   satisfy() {
     this.majorVersion = this._rb.readUInt16BE();
     this.minorVersion = this._rb.readUInt16BE();
@@ -42,5 +57,33 @@ export class HeadTable extends Table {
     this.fontDirectionHint = this._rb.readInt16BE();
     this.indexToLocFormat = this._rb.readInt16BE();
     this.glyphDataFormat = this._rb.readInt16BE();
+  }
+
+  write2(wb: BufferWriter) {
+    super.write2(wb);
+    wb.writeUInt16(this.majorVersion);
+    wb.writeUInt16(this.minorVersion);
+    wb.writeInt32(this.fontRevision);
+    wb.writeUInt32(this.checkSumAdjustment);
+    wb.writeUInt32(this.magicNumber);
+    wb.writeUInt16(this.flags);
+    wb.writeUInt16(this.unitsPerEm);
+    wb.writeUInt64(this.created);
+    wb.writeUInt64(this.modified);
+    wb.writeInt16(this.xMin);
+    wb.writeInt16(this.yMin);
+    wb.writeInt16(this.xMax);
+    wb.writeInt16(this.yMax);
+    wb.writeUInt16(this.macStyle);
+    wb.writeUInt16(this.lowestRecPPEM);
+    wb.writeInt16(this.fontDirectionHint);
+    wb.writeInt16(this.indexToLocFormat);
+    wb.writeInt16(this.glyphDataFormat);
+  }
+
+  size() {
+    const size = kSizeofUInt16 * 13 + kSizeofUInt32 * 3 + kSizeofUInt64 * 2;
+    this.record.length = size;
+    return size;
   }
 }

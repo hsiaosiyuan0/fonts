@@ -1,7 +1,7 @@
-import { ForwardBuffer } from "../forward-buffer";
-import { int16, int32, int8, uint16, uint32, uint8 } from "../types";
-import { repeat, Table, TableTag } from "./table";
-import { NOTFOUND } from "dns";
+import { ForwardBuffer, BufferWriter } from "../util";
+import { int16, int32, int8, uint16, uint32, uint8, kSizeofUInt16, kSizeofUInt8 } from "../types";
+import { repeat, Table, TableTag, TableRecord } from "./table";
+import { LocaTable } from "./loca";
 
 export enum SimpleGlyphFlag {
   ON_CURVE_POINT = 0x01,
@@ -36,6 +36,88 @@ export class SimpleGlyphTable {
   flags: uint8[] = [];
   xCoordinates: Array<uint8 | int16> = [];
   yCoordinates: Array<uint8 | int16> = [];
+
+  size() {
+    let size = this.endPtsOfContours.length * kSizeofUInt16;
+    size += kSizeofUInt16;
+    size += this.instructions.length * kSizeofUInt8;
+    for (let i = 0, len = this.flags.length; i < len; ++i) {
+      const f = this.flags[i];
+      size += kSizeofUInt8;
+
+      if (f & SimpleGlyphFlag.REPEAT_FLAG) {
+        while (true) {
+          const nf = this.flags[i + 1];
+          if (nf !== f) break;
+          ++i;
+        }
+        size += kSizeofUInt8;
+      }
+    }
+    for (let i = 0, len = this.xCoordinates.length; i < len; ++i) {
+      const f = this.flags[i];
+      if (f & SimpleGlyphFlag.X_SHORT_VECTOR) {
+        size += kSizeofUInt8;
+      } else if (~f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
+        size += kSizeofUInt16;
+      }
+      if (f & SimpleGlyphFlag.Y_SHORT_VECTOR) {
+        size += kSizeofUInt8;
+      } else if (~f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
+        size += kSizeofUInt16;
+      }
+    }
+    return size;
+  }
+
+  write2(wb: BufferWriter) {
+    this.endPtsOfContours.forEach(e => wb.writeUInt16(e));
+    wb.writeUInt16(this.instructionLength);
+    this.instructions.forEach(i => wb.writeUInt8(i));
+    for (let i = 0, len = this.flags.length; i < len; ++i) {
+      const f = this.flags[i];
+      wb.writeInt8(f);
+
+      if (f & SimpleGlyphFlag.REPEAT_FLAG) {
+        let times = 0;
+        while (true) {
+          const nf = this.flags[i + 1];
+          if (nf !== f) break;
+          ++times;
+          ++i;
+        }
+        wb.writeUInt8(times);
+      }
+    }
+    for (let i = 0, len = this.xCoordinates.length; i < len; ++i) {
+      const f = this.flags[i];
+      let x = this.xCoordinates[i];
+      if (f & SimpleGlyphFlag.X_SHORT_VECTOR) {
+        if (~f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
+          x = -x;
+        }
+        wb.writeUInt8(x);
+      } else {
+        if (~f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
+          wb.writeInt16(x);
+        }
+      }
+    }
+    for (let i = 0, len = this.yCoordinates.length; i < len; ++i) {
+      const f = this.flags[i];
+      let y = this.yCoordinates[i];
+      if (f & SimpleGlyphFlag.Y_SHORT_VECTOR) {
+        if (~f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
+          y = -y;
+        }
+        wb.writeUInt8(y);
+      } else {
+        if (~f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
+          wb.writeInt16(y);
+        }
+      }
+    }
+  }
 }
 
 export class TransformationOpt {
@@ -52,6 +134,46 @@ export class CompositeGlyphTable {
   argument1: uint8 | int8 | uint16 | int16;
   argument2: uint8 | int8 | uint16 | int16;
   transOpt: TransformationOpt;
+
+  size() {
+    let size = kSizeofUInt16 * 2;
+    if (this.flags & CompositeGlyphFlags.ARG_1_AND_2_ARE_WORDS) {
+      size += kSizeofUInt16 * 2;
+    } else {
+      size += kSizeofUInt8 * 2;
+    }
+    if (this.flags & CompositeGlyphFlags.WE_HAVE_A_SCALE) {
+      size += kSizeofUInt16;
+    } else if (this.flags & CompositeGlyphFlags.WE_HAVE_AN_X_AND_Y_SCALE) {
+      size += kSizeofUInt16 * 2;
+    } else if (this.flags & CompositeGlyphFlags.WE_HAVE_A_TWO_BY_TWO) {
+      size += kSizeofUInt16 * 4;
+    }
+    return size;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.flags);
+    wb.writeUInt16(this.glyphIndex);
+    if (this.flags & CompositeGlyphFlags.ARG_1_AND_2_ARE_WORDS) {
+      wb.writeUInt16(this.argument1);
+      wb.writeUInt16(this.argument2);
+    } else {
+      wb.writeUInt8(this.argument1);
+      wb.writeUInt8(this.argument2);
+    }
+    if (this.flags & CompositeGlyphFlags.WE_HAVE_A_SCALE) {
+      wb.writeInt16(this.transOpt.scale);
+    } else if (this.flags & CompositeGlyphFlags.WE_HAVE_AN_X_AND_Y_SCALE) {
+      wb.writeInt16(this.transOpt.xScale);
+      wb.writeInt16(this.transOpt.yScale);
+    } else if (this.flags & CompositeGlyphFlags.WE_HAVE_A_TWO_BY_TWO) {
+      wb.writeInt16(this.transOpt.xScale);
+      wb.writeInt16(this.transOpt.scale01);
+      wb.writeInt16(this.transOpt.scale10);
+      wb.writeInt16(this.transOpt.yScale);
+    }
+  }
 }
 
 export class Glyph {
@@ -63,10 +185,58 @@ export class Glyph {
 
   simpleGlyphTable: SimpleGlyphTable;
   compositeGlyphTables: CompositeGlyphTable[] = [];
+
+  size() {
+    let size = kSizeofUInt16 * 5;
+    if (this.numberOfContours > 0) {
+      size += this.simpleGlyphTable.size();
+    } else {
+      this.compositeGlyphTables.forEach(t => (size += t.size()));
+    }
+    return size;
+  }
+
+  get isSimple() {
+    return this.numberOfContours > 0;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeInt16(this.numberOfContours);
+    wb.writeInt16(this.xMin);
+    wb.writeInt16(this.yMin);
+    wb.writeInt16(this.xMax);
+    wb.writeInt16(this.yMax);
+    if (this.numberOfContours > 0) {
+      this.simpleGlyphTable.write2(wb);
+    } else {
+      this.compositeGlyphTables.forEach(t => t.write2(wb));
+    }
+  }
 }
 
 export class GlyphTable extends Table {
+  glyphs: Glyph[] = [];
+
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    super(record, buf, offset);
+    if (!this.record) {
+      this.record = new TableRecord(TableTag.glyf);
+    }
+  }
+
   satisfy() {}
+
+  size() {
+    let size = 0;
+    this.glyphs.forEach(g => (size += g.size()));
+    this.record.length = size;
+    return size;
+  }
+
+  write2(wb: BufferWriter): void {
+    super.write2(wb);
+    this.glyphs.forEach(g => g.write2(wb));
+  }
 
   private readSimpleGlyphTable(glyph: Glyph, rb: ForwardBuffer) {
     const t = new SimpleGlyphTable();
@@ -93,11 +263,11 @@ export class GlyphTable extends Table {
     for (let i = 0; i < pointCount; ++i) {
       const f = t.flags[i];
       if (f & SimpleGlyphFlag.X_SHORT_VECTOR) {
-        let x = rb.readUInt8();
-        if (~f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
-          x = -x;
+        if (f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
+          t.xCoordinates.push(rb.readUInt8());
+        } else {
+          t.xCoordinates.push(-rb.readUInt8());
         }
-        t.xCoordinates.push(x);
       } else {
         if (f & SimpleGlyphFlag.X_IS_SAME_OR_POSITIVE_X_SHORT_VECTOR) {
           t.xCoordinates.push(0);
@@ -110,11 +280,11 @@ export class GlyphTable extends Table {
     for (let i = 0; i < pointCount; ++i) {
       const f = t.flags[i];
       if (f & SimpleGlyphFlag.Y_SHORT_VECTOR) {
-        let x = rb.readUInt8();
-        if (~f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
-          x = -x;
+        if (f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
+          t.yCoordinates.push(rb.readUInt8());
+        } else {
+          t.yCoordinates.push(-rb.readUInt8());
         }
-        t.yCoordinates.push(x);
       } else {
         if (f & SimpleGlyphFlag.Y_IS_SAME_OR_POSITIVE_Y_SHORT_VECTOR) {
           t.yCoordinates.push(0);
@@ -141,14 +311,12 @@ export class GlyphTable extends Table {
           t.argument1 = rb.readUInt16BE();
           t.argument2 = rb.readUInt16BE();
         }
+      } else if (t.flags & CompositeGlyphFlags.ARGS_ARE_XY_VALUES) {
+        t.argument1 = rb.readInt8();
+        t.argument2 = rb.readInt8();
       } else {
-        if (t.flags & CompositeGlyphFlags.ARGS_ARE_XY_VALUES) {
-          t.argument1 = rb.readInt8();
-          t.argument2 = rb.readInt8();
-        } else {
-          t.argument1 = rb.readUInt8();
-          t.argument2 = rb.readUInt8();
-        }
+        t.argument1 = rb.readUInt8();
+        t.argument2 = rb.readUInt8();
       }
 
       const transOpt = new TransformationOpt();
@@ -170,20 +338,27 @@ export class GlyphTable extends Table {
     }
   }
 
-  readGlyphAt(offset: number) {
-    const rb = this._rb.branch(this.record.offset + offset);
-    const g = new Glyph();
-    g.numberOfContours = rb.readInt16BE();
-    g.xMin = rb.readInt16BE();
-    g.yMin = rb.readInt16BE();
-    g.xMax = rb.readInt16BE();
-    g.yMax = rb.readInt16BE();
+  readGlyphAt(offset: number): Glyph;
+  readGlyphAt(idx: number, loca: LocaTable): Glyph;
+  readGlyphAt(idx: number, loca?: LocaTable) {
+    if (!loca) {
+      const offset = idx;
+      const rb = this._rb.branch(this.record.offset + offset);
+      const g = new Glyph();
+      g.numberOfContours = rb.readInt16BE();
+      g.xMin = rb.readInt16BE();
+      g.yMin = rb.readInt16BE();
+      g.xMax = rb.readInt16BE();
+      g.yMax = rb.readInt16BE();
 
-    if (g.numberOfContours > 0) {
-      this.readSimpleGlyphTable(g, rb);
-    } else {
-      this.readCompositeGlyphTable(g, rb);
+      if (g.numberOfContours > 0) {
+        this.readSimpleGlyphTable(g, rb);
+      } else {
+        this.readCompositeGlyphTable(g, rb);
+      }
+      return g;
     }
-    return g;
+    const ofst = loca.idx2offset(idx);
+    return this.readGlyphAt(ofst);
   }
 }

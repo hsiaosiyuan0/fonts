@@ -1,11 +1,28 @@
-import { ForwardBuffer } from "../forward-buffer";
-import { int16, kSizeofUInt16, uint16, uint24, uint32, uint8 } from "../types";
+import { ForwardBuffer, BufferWriter } from "../util";
+import {
+  int16,
+  kSizeofUInt16,
+  uint16,
+  uint24,
+  uint32,
+  uint8,
+  kSizeofUInt32,
+  kSizeofUInt8
+} from "../types";
 import { Table, TableTag, repeat, TableRecord } from "./table";
 
 export class EncodingRecord {
   platformId: uint16;
   encodingID: uint16;
   offset: uint32;
+
+  static kSize = kSizeofUInt16 + kSizeofUInt16 + kSizeofUInt32;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.platformId);
+    wb.writeUInt16(this.encodingID);
+    wb.writeUInt32(this.offset);
+  }
 }
 
 export class CmapTable extends Table {
@@ -15,10 +32,41 @@ export class CmapTable extends Table {
 
   subTables: SubTable[] = [];
 
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    super(record, buf, offset);
+    if (!this.record) {
+      this.record = new TableRecord(TableTag.cmap);
+    }
+  }
+
   satisfy() {
     this.readHead();
     this.readEncodingRecords();
     this.readSubTables();
+  }
+
+  size() {
+    let size = kSizeofUInt16 * 2 + this.encodingRecords.length * EncodingRecord.kSize;
+    this.subTables.forEach(t => (size += t.size()));
+    this.record.length = size;
+    return size;
+  }
+
+  write2(wb: BufferWriter) {
+    super.write2(wb);
+    wb.writeUInt16(this.version);
+    wb.writeUInt16(this.numTables);
+    const len = this.subTables.length;
+    this.subTables.forEach((t, i) => {
+      if (i === 0) {
+        t.encoding.offset = kSizeofUInt16 * 2 + EncodingRecord.kSize * len;
+      } else {
+        const prev = this.subTables[i - 1];
+        t.encoding.offset = prev.encoding.offset + prev.size();
+      }
+    });
+    this.subTables.forEach(t => t.encoding.write2(wb));
+    this.subTables.forEach(t => t.write2(wb));
   }
 
   private readHead() {
@@ -115,14 +163,14 @@ export abstract class SubTable {
   protected _rb: ForwardBuffer;
 
   format: uint16 = 0;
-  length: uint32;
-  language: uint32;
+  length: uint16 | uint32;
+  language: uint16 | uint32;
 
   encoding: EncodingRecord;
 
-  constructor(format: number, buf: ForwardBuffer) {
+  constructor(format: number, buf?: ForwardBuffer) {
     this.format = format;
-    this._rb = buf;
+    if (buf) this._rb = buf;
   }
 
   satisfy() {
@@ -131,6 +179,10 @@ export abstract class SubTable {
   }
 
   abstract lookup(cc: number): number;
+
+  abstract size(): number;
+
+  abstract write2(wb: BufferWriter): void;
 }
 
 // Format 0: Byte encoding table
@@ -150,6 +202,17 @@ export class SubTableF0 extends SubTable {
   lookup(cc: number) {
     return this.glyphIdxArray[cc & 0x00ff];
   }
+
+  size(): number {
+    return kSizeofUInt8 * this.glyphIdxArray.length;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.language);
+    this.glyphIdxArray.forEach(b => wb.writeUInt8(b));
+  }
 }
 
 export const kSizeofSubHeader = 8;
@@ -168,13 +231,23 @@ export class SubHeader {
     const [len, idx] = this.pos;
     return this.idRangeOffset - (len - idx - 1) * kSizeofSubHeader - kSizeofUInt16;
   }
+
+  static kSize = kSizeofUInt16 * 4;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.firstCode);
+    wb.writeUInt16(this.entryCount);
+    wb.writeInt16(this.idDelta);
+    wb.writeUInt16(this.idRangeOffset);
+  }
 }
 
 export class SubTableF2 extends SubTable {
   subHeaderKeys: uint16[] = [];
-  subHeaderCount = 0;
   subHeaders: SubHeader[] = [];
   glyphIndexArray: uint16[] = [];
+
+  subHeaderCount = 0;
 
   constructor(buf: ForwardBuffer) {
     super(2, buf);
@@ -188,7 +261,7 @@ export class SubTableF2 extends SubTable {
   }
 
   lookup(cc: number) {
-    const first = cc >>> 8;
+    const first = (cc & 0xff) >>> 8;
     const second = cc & 0x00ff;
     const key = this.subHeaderKeys[first];
     const header = this.subHeaders[key / 8];
@@ -197,6 +270,23 @@ export class SubTableF2 extends SubTable {
       if (idx !== 0) return (idx + header.idDelta) & 0xffff;
     }
     return 0;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.language);
+    this.subHeaderKeys.forEach(k => wb.writeUInt16(k));
+    this.subHeaders.forEach(h => h.write2(wb));
+    this.glyphIndexArray.forEach(i => wb.writeUInt16(i));
+  }
+
+  size() {
+    let size = kSizeofUInt16 * 3;
+    size += this.subHeaderKeys.length * kSizeofUInt16;
+    size += this.subHeaders.length * SubHeader.kSize;
+    size += this.getSubHeaderIdx.length * kSizeofUInt16;
+    return size;
   }
 
   private readSubHeaderKeys() {
@@ -242,13 +332,13 @@ export class SubTableF4 extends SubTable {
   entrySelector: uint16;
   rangeShift: uint16;
   endCount: uint16[] = [];
-  reservedPad: uint16;
+  reservedPad: uint16 = 0;
   startCount: uint16[] = [];
-  idDelta: int16[] = [];
+  idDelta: uint16[] = [];
   idRangeOffset: uint16[] = [];
   glyphIdArray: uint16[] = [];
 
-  constructor(buf: ForwardBuffer) {
+  constructor(buf?: ForwardBuffer) {
     super(4, buf);
   }
 
@@ -268,12 +358,65 @@ export class SubTableF4 extends SubTable {
           break;
         }
 
-        const startIdx = (this.idRangeOffset[i] - (len - i) * kSizeofUInt16) / kSizeofUInt16;
-        idx = cc - this.startCount[i] + startIdx;
-        if (idx === 0) idx = idx + this.idDelta[i];
+        const ro = this.idRangeOffset[i];
+        const startIdx = ro / kSizeofUInt16 - (len - i);
+        idx = this.glyphIdArray[cc - this.startCount[i] + startIdx];
+        if (idx !== 0) idx = idx + this.idDelta[i];
       }
     }
     return idx & 0xffff;
+  }
+
+  static pack(data: Array<{ cp: number; gIdx: number }>) {
+    data.sort((a, b) => a.cp - b.cp);
+    const t = new SubTableF4();
+    data.forEach(({ cp, gIdx }) => {
+      t.endCount.push(cp);
+      t.startCount.push(cp);
+      t.idRangeOffset.push(0);
+      t.idDelta.push(0xffff & (gIdx - cp));
+    });
+
+    // last
+    t.endCount.push(0xffff);
+    t.startCount.push(0xffff);
+    t.idRangeOffset.push(0);
+    t.idDelta.push(1);
+
+    const segCount = t.endCount.length;
+    t.segCountX2 = segCount * 2;
+    t.searchRange = 2 * Math.pow(2, Math.floor(Math.log2(segCount)));
+    t.entrySelector = Math.log2(t.searchRange / 2);
+    t.rangeShift = 2 * segCount - t.searchRange;
+    t.length = t.size();
+    return t;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.language);
+    wb.writeUInt16(this.segCountX2);
+    wb.writeUInt16(this.searchRange);
+    wb.writeUInt16(this.entrySelector);
+    wb.writeUInt16(this.rangeShift);
+    this.endCount.forEach(e => wb.writeUInt16(e));
+    wb.writeUInt16(this.reservedPad);
+    this.startCount.forEach(s => wb.writeUInt16(s));
+    this.idDelta.forEach(i => wb.writeUInt16(i));
+    this.idRangeOffset.forEach(i => wb.writeUInt16(i));
+    this.glyphIdArray.forEach(i => wb.writeUInt16(i));
+  }
+
+  size() {
+    let size = kSizeofUInt16 * 7;
+    size += this.endCount.length * kSizeofUInt16;
+    size += kSizeofUInt16;
+    size += this.startCount.length * kSizeofUInt16;
+    size += this.idDelta.length * kSizeofUInt16;
+    size += this.idRangeOffset.length * kSizeofUInt16;
+    size += this.glyphIdArray.length * kSizeofUInt16;
+    return size;
   }
 
   private readHeader() {
@@ -288,7 +431,7 @@ export class SubTableF4 extends SubTable {
     repeat(segCount, () => this.endCount.push(this._rb.readUInt16BE()));
     this.reservedPad = this._rb.readUInt16BE();
     repeat(segCount, () => this.startCount.push(this._rb.readUInt16BE()));
-    repeat(segCount, () => this.idDelta.push(this._rb.readInt16BE()));
+    repeat(segCount, () => this.idDelta.push(this._rb.readUInt16BE()));
     repeat(segCount, () => this.idRangeOffset.push(this._rb.readUInt16BE()));
   }
 
@@ -321,12 +464,33 @@ export class SubTableF6 extends SubTable {
     if (idx < this.entryCount) return this.glyphIdArray[idx];
     return 0;
   }
+
+  size() {
+    return kSizeofUInt16 * 3 + kSizeofUInt16 * 2 + this.glyphIdArray.length * kSizeofUInt16;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.language);
+    wb.writeUInt16(this.firstCode);
+    wb.writeUInt16(this.entryCount);
+    this.glyphIdArray.forEach(i => wb.writeUInt16(i));
+  }
 }
 
 export class SequentialMapGroup {
   startCharCode: uint32;
   endCharCode: uint32;
   startGlyphID: uint32;
+
+  static kSize = kSizeofUInt32 * 3;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt32(this.startCharCode);
+    wb.writeUInt32(this.endCharCode);
+    wb.writeUInt32(this.startGlyphID);
+  }
 }
 
 export class SubTableF8 extends SubTable {
@@ -340,7 +504,7 @@ export class SubTableF8 extends SubTable {
   }
 
   satisfy() {
-    this.reserved = this._rb.readUInt32BE();
+    this.reserved = this._rb.readUInt16BE();
     super.satisfy();
     repeat(8192, () => this.is32.push(this._rb.readUInt8()));
     this.numGroups = this._rb.readUInt32BE();
@@ -362,9 +526,29 @@ export class SubTableF8 extends SubTable {
     }
     return 0;
   }
+
+  size() {
+    let size = kSizeofUInt16 * 2 + kSizeofUInt32 * 2;
+    size += this.is32.length * kSizeofUInt8;
+    size += kSizeofUInt32;
+    size += this.groups.length * SequentialMapGroup.kSize;
+    return size;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.reserved);
+    wb.writeUInt32(this.length);
+    wb.writeUInt32(this.language);
+    this.is32.forEach(i => wb.writeUInt8(i));
+    wb.writeUInt32(this.numGroups);
+    this.groups.forEach(g => g.write2(wb));
+  }
 }
 
 export class SubTableF10 extends SubTable {
+  reserved: uint16;
+
   startCharCode: uint32;
   numChars: uint32;
   glyphs: uint16[] = [];
@@ -374,6 +558,7 @@ export class SubTableF10 extends SubTable {
   }
 
   satisfy() {
+    this.reserved = this._rb.readUInt16BE();
     super.satisfy();
     this.startCharCode = this._rb.readUInt32BE();
     this.numChars = this._rb.readUInt32BE();
@@ -384,6 +569,20 @@ export class SubTableF10 extends SubTable {
     const idx = cc - this.startCharCode;
     if (idx < this.numChars) return this.glyphs[idx];
     return 0;
+  }
+
+  size() {
+    return kSizeofUInt16 * 2 + kSizeofUInt32 * 2 + this.glyphs.length * kSizeofUInt16;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.reserved);
+    wb.writeUInt32(this.length);
+    wb.writeUInt32(this.language);
+    wb.writeUInt32(this.startCharCode);
+    wb.writeUInt32(this.numChars);
+    this.glyphs.forEach(i => wb.writeUInt16(i));
   }
 }
 
@@ -410,7 +609,7 @@ export class SubTableF12 extends SubTable {
   }
 
   lookup(cc: number) {
-    for (let i = 0, len = this.groups.length; i < len; ++i) {
+    for (let i = 0, len = this.numGroups; i < len; ++i) {
       const g = this.groups[i];
       if (cc >= g.startCharCode && cc <= g.endCharCode) {
         return cc - g.startCharCode + g.startGlyphID;
@@ -418,12 +617,33 @@ export class SubTableF12 extends SubTable {
     }
     return 0;
   }
+
+  size() {
+    return kSizeofUInt16 * 2 + kSizeofUInt32 * 3 + this.numGroups * SequentialMapGroup.kSize;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.reserved);
+    wb.writeUInt32(this.length);
+    wb.writeUInt32(this.language);
+    wb.writeUInt32(this.numGroups);
+    this.groups.forEach(g => g.write2(wb));
+  }
 }
 
 export class ConstantMapGroup {
   startCharCode: uint32;
   endCharCode: uint32;
   glyphID: uint32;
+
+  static kSize = kSizeofUInt32 * 3;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt32(this.startCharCode);
+    wb.writeUInt32(this.endCharCode);
+    wb.writeUInt32(this.glyphID);
+  }
 }
 
 export class SubTableF13 extends SubTable {
@@ -456,6 +676,19 @@ export class SubTableF13 extends SubTable {
       }
     }
     return 0;
+  }
+
+  size() {
+    return kSizeofUInt16 * 2 + kSizeofUInt32 * 3 + this.groups.length * ConstantMapGroup.kSize;
+  }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.reserved);
+    wb.writeUInt32(this.length);
+    wb.writeUInt32(this.language);
+    wb.writeUInt32(this.numGroups);
+    this.groups.forEach(g => g.write2(wb));
   }
 }
 
@@ -563,4 +796,10 @@ export class SubTableF14 extends SubTable {
   lookup(cc: number) {
     return 0;
   }
+
+  size() {
+    return 0;
+  }
+
+  write2(wb: BufferWriter) {}
 }

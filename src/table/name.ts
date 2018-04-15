@@ -1,6 +1,6 @@
-import { ForwardBuffer } from "../forward-buffer";
-import { Table, TableTag, repeat } from "./table";
-import { uint16, uint32 } from "../types";
+import { kSizeofUInt16, uint16, uint32 } from "../types";
+import { BufferWriter, ForwardBuffer } from "../util";
+import { repeat, Table, TableTag, TableRecord } from "./table";
 
 export class NameRecord {
   platformID: uint16;
@@ -11,6 +11,8 @@ export class NameRecord {
   offset: uint16;
 
   nameTable: NameTable;
+
+  record = new TableRecord(TableTag.name);
 
   private _str: string | null = null;
 
@@ -29,11 +31,29 @@ export class NameRecord {
     if (nameIdDescMap.has(this.nameID)) return nameIdDescMap.get(this.nameID);
     return this.nameID <= 255 ? "Reserved for future expansion" : "Font-specific names";
   }
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.platformID);
+    wb.writeUInt16(this.encodingID);
+    wb.writeUInt16(this.languageID);
+    wb.writeUInt16(this.nameID);
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.offset);
+  }
+
+  static kSize = kSizeofUInt16 * 6;
 }
 
 export class LangTagRecord {
   length: uint16;
   offset: uint16;
+
+  write2(wb: BufferWriter) {
+    wb.writeUInt16(this.length);
+    wb.writeUInt16(this.offset);
+  }
+
+  static kSize = kSizeofUInt16 * 2;
 }
 
 export class NameTable extends Table {
@@ -48,6 +68,13 @@ export class NameTable extends Table {
   // format 1
   langTagCount: uint16;
   langTagRecords: LangTagRecord[] = [];
+
+  constructor(record?: TableRecord, buf?: Buffer | ForwardBuffer, offset = 0) {
+    super(record, buf, offset);
+    if (!this.record) {
+      this.record = new TableRecord(TableTag.name);
+    }
+  }
 
   satisfy() {
     this.format = this._rb.readUInt16BE();
@@ -79,6 +106,34 @@ export class NameTable extends Table {
       this.record.offset + this.stringOffset,
       this.record.offset + this.record.length
     );
+  }
+
+  write2(wb: BufferWriter) {
+    super.write2(wb);
+    wb.writeUInt16(this.format);
+    wb.writeUInt16(this.count);
+    wb.writeUInt16(this.stringOffset);
+    this.nameRecords.forEach(r => r.write2(wb));
+    if (this.format === 0) {
+      wb.write(this.stringData);
+    } else {
+      wb.writeUInt16(this.langTagCount);
+      this.langTagRecords.forEach(r => r.write2(wb));
+      wb.write(this.stringData);
+    }
+  }
+
+  size() {
+    let size = kSizeofUInt16 * 3;
+    size += this.nameRecords.length * NameRecord.kSize;
+    if (this.format === 1) {
+      size += kSizeofUInt16;
+      size += this.langTagRecords.length * LangTagRecord.kSize;
+    }
+    size += this.stringData.length;
+
+    this.record.length = size;
+    return size;
   }
 }
 

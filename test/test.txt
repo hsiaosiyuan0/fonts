@@ -1,0 +1,1470 @@
+True Type Font File Dumper: v 0.5.5
+Copyright 1996-1998 ollie@ms1.hinet.net
+Dumping File:test.ttf
+
+
+Offset Table
+------------
+	 sfnt version: 		 1.0
+	 number of tables: 16
+   0. 'FFTM' - checksum = 0x4d1f707d, offset = 0x0000010c, len =        28
+   1. 'GDEF' - checksum = 0x00273548, offset = 0x00000128, len =        30
+   2. 'OS/2' - checksum = 0xdb19684d, offset = 0x00000148, len =        86
+   3. 'cmap' - checksum = 0x00000000, offset = 0x000001a0, len =        52
+   4. 'cvt ' - checksum = 0x0988084d, offset = 0x000001d4, len =        58
+   5. 'fpgm' - checksum = 0x324a6698, offset = 0x00000210, len =       199
+   6. 'gasp' - checksum = 0x001c000a, offset = 0x000002d8, len =        16
+   7. 'glyf' - checksum = 0x00000000, offset = 0x000002e8, len =       853
+   8. 'head' - checksum = 0xe83e2847, offset = 0x00000640, len =        54
+   9. 'hhea' - checksum = 0x03f0076a, offset = 0x00000678, len =        36
+  10. 'hmtx' - checksum = 0x00000000, offset = 0x0000069c, len =        32
+  11. 'loca' - checksum = 0x00000000, offset = 0x000006bc, len =        36
+  12. 'maxp' - checksum = 0x00000000, offset = 0x000006e0, len =        32
+  13. 'name' - checksum = 0x67bae9bd, offset = 0x00000700, len =      3787
+  14. 'post' - checksum = 0xf4b57f66, offset = 0x000015cc, len =       120
+  15. 'prep' - checksum = 0x9a36c321, offset = 0x00001644, len =        40
+
+'cmap' Table - Character to Glyph Index Mapping Table
+-----------------------------------------------------
+	 'cmap' version: 0
+	 number of encodings: 1
+	 number of subtables: 1
+
+Encoding   0.	 PlatformID:  0
+		 EcodingID:   3
+		 SubTable: 0, Offset: 0x0000000c
+
+SubTable   0.	 Format 4 - Segment mapping to delta values
+		 Length:      40
+		 Version:      0
+		 segCount:	 3
+		 searchRange:	 4
+		 entrySelector:	 1
+		 rangeShift:	 2
+		 Seg     0 : St = bc31, En = bc31, D =  17359, RO =      0, gId# = N/A
+		 Seg     1 : St = c1a1, En = c1a1, D =  15971, RO =      0, gId# = N/A
+		 Seg     2 : St = ffff, En = ffff, D =      1, RO =      0, gId# = N/A
+		 Number of glyphIndex 0
+Segment 0:
+		Char 0xbc31 -> Index 0
+Segment 1:
+		Char 0xc1a1 -> Index 4
+Segment 2:
+		Char 0xffff -> Index 0
+
+
+'head' Table - Font Header
+--------------------------
+	 'head' version:	 1.0
+	 fontReversion:		 0.0
+	 checkSumAdjustment:	 0x7a675e13
+	 magicNumber:		 0x5f0f3cf5
+	 flags:			 0x001f
+	 unitsPerEm:		 1000
+	 created:		 0x00000000c470724c
+	 modified:		 0x00000000c470724c
+	 xMin:			 93
+	 yMin:			 -138
+	 xMax:			 892
+	 yMax:			 749
+	 macStyle bits:		 0x0001
+	 lowestRecPPEM:		 8
+	 fontDirectionHint:	 2
+	 indexToLocFormat:	 1
+	 glyphDataFormat:	 0
+
+
+'hhea' Table - Horizontal Header
+--------------------------
+	 'hhea' version:	 1.0
+	 yAscender:		 963
+	 yDescender:		 -250
+	 yLineGap:		 0
+	 advanceWidthMax:	 1000
+	 minLeftSideBearing:	 93
+	 minRightSideBearing:	 108
+	 xMaxExtent:		 892
+	 caretSlopeRise:	 1
+	 caretSlopeRun:		 0
+	 reserved0:		 0
+	 reserved1:		 0
+	 reserved2:		 0
+	 reserved3:		 0
+	 reserved4:		 0
+	 metricDataFormat:	 0
+	 numberOfHMetrics:	 8
+
+'hmtx' Table - Horizontal Metrics
+---------------------------------
+	    0. advWid: 1000, LSBear:  143
+	    1. advWid: 1000, LSBear:  143
+	    2. advWid: 1000, LSBear:  247
+	    3. advWid: 1000, LSBear:  579
+	    4. advWid: 1000, LSBear:   93
+	    5. advWid: 1000, LSBear:  137
+	    6. advWid: 1000, LSBear:  204
+	    7. advWid: 1000, LSBear:   93
+
+'loca' Table - Index to Location
+--------------------------------
+	 Idx      0 -> GlyphOffset 0x00000000
+	 Idx      1 -> GlyphOffset 0x0000001c
+	 Idx      2 -> GlyphOffset 0x000000d4
+	 Idx      3 -> GlyphOffset 0x00000135
+	 Idx      4 -> GlyphOffset 0x000001ae
+	 Idx      5 -> GlyphOffset 0x000001ca
+	 Idx      6 -> GlyphOffset 0x00000215
+	 Idx      7 -> GlyphOffset 0x00000303
+	 Ended at 0x00000355
+
+'maxp' Table - Maximum Profile
+------------------------------
+	 'maxp' version:	 1.0
+	 numGlyphs:		 8
+	 maxPoints:		 162
+	 maxContours:		 17
+	 maxCompositePoints:	 186
+	 maxCompositeContours:	 11
+	 maxZones:		 2
+	 maxTwilightPoints:	 1
+	 maxStorage:		 0
+	 maxFunctionDefs:	 9
+	 maxInstructionDefs:	 0
+	 maxStackElements:	 256
+	 maxSizeOfInstructions:	 346
+	 maxComponentElements:	 3
+	 maxCompoenetDepth:	 1
+
+'name' Table - Naming Table
+---------------------------
+	 Format:		 0
+	 Number of Record:	 63
+	 Storage offset:	 762
+Name table   0.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 0
+		 Length:	 36
+		 Offset:	 0
+		 43 6f 70 79 72 69 67 68 74 20  >  Copyright 
+		 a9 20 31 39 39 38 2d 32 30 30  >  . 1998-200
+		 38 20 62 79 20 4b 6f 61 75 6e  >  8 by Koaun
+		 67 68 69 20 55 6e              > ghi Un
+Name table   1.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 1
+		 Length:	 5
+		 Offset:	 36
+		 55 6e 42 6f 6d                 > UnBom
+Name table   2.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 2
+		 Length:	 4
+		 Offset:	 41
+		 42 6f 6c 64                    > Bold
+Name table   3.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 3
+		 Length:	 29
+		 Offset:	 45
+		 46 6f 6e 74 46 6f 72 67 65 20  >  FontForge 
+		 3a 20 55 6e 20 42 6f 6d 20 3a  >  : Un Bom :
+		 20 38 2d 36 2d 32 30 30 38     >  8-6-2008
+Name table   4.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 4
+		 Length:	 6
+		 Offset:	 74
+		 55 6e 20 42 6f 6d              > Un Bom
+Name table   5.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 5
+		 Length:	 12
+		 Offset:	 80
+		 56 65 72 73 69 6f 6e 20 31 2e  >  Version 1.
+		 30 32                          > 02
+Name table   6.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 6
+		 Length:	 5
+		 Offset:	 92
+		 55 6e 42 6f 6d                 > UnBom
+Name table   7.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 7
+		 Length:	 8
+		 Offset:	 97
+		 55 6e 20 46 6f 6e 74 73        > Un Fonts
+Name table   8.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 8
+		 Length:	 39
+		 Offset:	 105
+		 43 6f 76 65 72 74 65 64 20 74  >  Coverted t
+		 6f 20 54 72 75 65 54 79 70 65  >  o TrueType
+		 20 62 79 20 77 6b 70 61 72 6b  >   by wkpark
+		 40 6b 6c 64 70 2e 6f 72 67     > @kldp.org
+Name table   9.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 9
+		 Length:	 11
+		 Offset:	 144
+		 4b 6f 61 75 6e 67 68 69 20 55  >  Koaunghi U
+		 6e                             > n
+Name table  10.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 10
+		 Length:	 194
+		 Offset:	 155
+		 54 68 69 73 20 69 73 20 74 68  >  This is th
+		 65 20 48 4c 61 54 65 58 20 66  >  e HLaTeX f
+		 6f 6e 74 73 20 6d 61 64 65 20  >  onts made 
+		 62 79 20 4b 6f 61 75 6e 67 68  >  by Koaungh
+		 69 20 55 6e 2e 20 49 74 20 6f  >  i Un. It o
+		 72 69 67 69 6e 61 6c 6c 79 20  >  riginally 
+		 75 73 65 64 20 6f 6e 20 74 68  >  used on th
+		 65 20 48 4c 61 54 65 58 20 6f  >  e HLaTeX o
+		 6e 6c 79 2e 20 49 74 20 63 6f  >  nly. It co
+		 6e 74 61 69 6e 73 20 61 6c 6c  >  ntains all
+		 20 48 61 6e 67 75 6c 20 53 79  >   Hangul Sy
+		 6c 6c 61 62 6c 65 73 20 64 65  >  llables de
+		 66 69 6e 65 64 20 69 6e 20 74  >  fined in t
+		 68 65 20 55 6e 69 63 6f 64 65  >  he Unicode
+		 2e 20 49 74 20 69 73 20 63 6f  >  . It is co
+		 6e 76 65 72 74 65 64 20 74 6f  >  nverted to
+		 20 54 72 75 65 54 79 70 65 20  >   TrueType 
+		 66 6f 6e 74 73 20 77 69 74 68  >  fonts with
+		 20 74 68 65 20 46 6f 6e 74 46  >   the FontF
+		 6f 72 67 65                    > orge
+Name table  11.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 11
+		 Length:	 33
+		 Offset:	 349
+		 68 74 74 70 3a 2f 2f 6b 6c 64  >  http://kld
+		 70 2e 6e 65 74 2f 70 72 6f 6a  >  p.net/proj
+		 65 63 74 73 2f 75 6e 66 6f 6e  >  ects/unfon
+		 74 73 2f                       > ts/
+Name table  12.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 12
+		 Length:	 33
+		 Offset:	 382
+		 68 74 74 70 3a 2f 2f 6b 6c 64  >  http://kld
+		 70 2e 6e 65 74 2f 70 72 6f 6a  >  p.net/proj
+		 65 63 74 73 2f 75 6e 66 6f 6e  >  ects/unfon
+		 74 73 2f                       > ts/
+Name table  13.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 13
+		 Length:	 18
+		 Offset:	 415
+		 47 4e 55 20 50 75 62 6c 69 63  >  GNU Public
+		 20 4c 69 63 65 6e 73 65        >  License
+Name table  14.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 14
+		 Length:	 41
+		 Offset:	 433
+		 68 74 74 70 3a 2f 2f 6b 6f 72  >  http://kor
+		 65 61 2e 67 6e 75 2e 6f 72 67  >  ea.gnu.org
+		 2f 63 6f 70 79 6c 65 66 74 2f  >  /copyleft/
+		 67 70 6c 2e 6b 6f 2e 68 74 6d  >  gpl.ko.htm
+		 6c                             > l
+Name table  15.	 PlatformID:	 1
+		 EncodingID:	 0
+		 LanguageID:	 0
+		 NameID:	 19
+		 Length:	 15
+		 Offset:	 474
+		 47 4e 55 20 69 73 20 4e 6f 74  >  GNU is Not
+		 20 55 6e 69 78                 >  Unix
+Name table  16.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 0
+		 Length:	 10
+		 Offset:	 489
+		 43 6f 70 79 72 69 67 68 74 20  >  Copyright 
+		                                > 
+Name table  17.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 1
+		 Length:	 5
+		 Offset:	 499
+		 c0 ba 20 ba bd                 > .. ..
+Name table  18.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 2
+		 Length:	 7
+		 Offset:	 504
+		 52 65 67 75 6c 61 72           > Regular
+Name table  19.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 3
+		 Length:	 29
+		 Offset:	 511
+		 46 6f 6e 74 46 6f 72 67 65 20  >  FontForge 
+		 3a 20 55 6e 20 42 6f 6d 20 3a  >  : Un Bom :
+		 20 38 2d 36 2d 32 30 30 38     >  8-6-2008
+Name table  20.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 4
+		 Length:	 5
+		 Offset:	 540
+		 c0 ba 20 ba bd                 > .. ..
+Name table  21.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 5
+		 Length:	 12
+		 Offset:	 545
+		 56 65 72 73 69 6f 6e 20 31 2e  >  Version 1.
+		 30 32                          > 02
+Name table  22.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 6
+		 Length:	 5
+		 Offset:	 557
+		 55 6e 42 6f 6d                 > UnBom
+Name table  23.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 7
+		 Length:	 8
+		 Offset:	 562
+		 55 6e 20 46 6f 6e 74 73        > Un Fonts
+Name table  24.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 8
+		 Length:	 39
+		 Offset:	 570
+		 43 6f 76 65 72 74 65 64 20 74  >  Coverted t
+		 6f 20 54 72 75 65 54 79 70 65  >  o TrueType
+		 20 62 79 20 77 6b 70 61 72 6b  >   by wkpark
+		 40 6b 6c 64 70 2e 6f 72 67     > @kldp.org
+Name table  25.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 9
+		 Length:	 11
+		 Offset:	 609
+		 4b 6f 61 75 6e 67 68 69 20 55  >  Koaunghi U
+		 6e                             > n
+Name table  26.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 10
+		 Length:	 245
+		 Offset:	 620
+		 54 68 69 73 20 69 73 20 74 68  >  This is th
+		 65 20 48 4c 61 54 65 58 20 66  >  e HLaTeX f
+		 6f 6e 74 73 20 6d 61 64 65 20  >  onts made 
+		 62 79 20 4b 6f 61 75 6e 67 68  >  by Koaungh
+		 69 20 55 6e 2e 20 49 74 20 6f  >  i Un. It o
+		 72 69 67 69 6e 61 6c 6c 79 20  >  riginally 
+		 75 73 65 64 20 6f 6e 20 74 68  >  used on th
+		 65 20 48 4c 61 54 65 58 20 6f  >  e HLaTeX o
+		 6e 6c 79 2e 20 49 74 20 63 6f  >  nly. It co
+		 6e 74 61 69 6e 73 20 61 6c 6c  >  ntains all
+		 20 48 61 6e 67 75 6c 20 53 79  >   Hangul Sy
+		 6c 6c 61 62 6c 65 73 20 64 65  >  llables de
+		 66 69 6e 65 64 20 69 6e 20 74  >  fined in t
+		 68 65 20 55 6e 69 63 6f 64 65  >  he Unicode
+		 2e 20 49 74 20 69 73 20 63 6f  >  . It is co
+		 6e 76 65 72 74 65 64 20 74 6f  >  nverted to
+		 20 54 72 75 65 54 79 70 65 20  >   TrueType 
+		 66 6f 6e 74 73 20 77 69 74 68  >  fonts with
+		 20 74 68 65 20 46 6f 6e 74 46  >   the FontF
+		 6f 72 67 65 2e 20 59 6f 75 20  >  orge. You 
+		 63 61 6e 20 66 72 65 65 6c 79  >  can freely
+		 20 72 65 64 69 73 74 72 69 62  >   redistrib
+		 75 74 65 20 69 74 20 75 6e 64  >  ute it und
+		 65 72 20 74 68 65 20 47 4e 55  >  er the GNU
+		 20 47 50 4c 2e                 >  GPL.
+Name table  27.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 11
+		 Length:	 33
+		 Offset:	 865
+		 68 74 74 70 3a 2f 2f 6b 6c 64  >  http://kld
+		 70 2e 6e 65 74 2f 70 72 6f 6a  >  p.net/proj
+		 65 63 74 73 2f 75 6e 66 6f 6e  >  ects/unfon
+		 74 73 2f                       > ts/
+Name table  28.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 12
+		 Length:	 33
+		 Offset:	 898
+		 68 74 74 70 3a 2f 2f 6b 6c 64  >  http://kld
+		 70 2e 6e 65 74 2f 70 72 6f 6a  >  p.net/proj
+		 65 63 74 73 2f 75 6e 66 6f 6e  >  ects/unfon
+		 74 73 2f                       > ts/
+Name table  29.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 13
+		 Length:	 26
+		 Offset:	 931
+		 47 4e 55 20 47 65 6e 65 72 61  >  GNU Genera
+		 6c 20 50 75 62 6c 69 63 20 4c  >  l Public L
+		 69 63 65 6e 73 65              > icense
+Name table  30.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 14
+		 Length:	 41
+		 Offset:	 957
+		 68 74 74 70 3a 2f 2f 6b 6f 72  >  http://kor
+		 65 61 2e 67 6e 75 2e 6f 72 67  >  ea.gnu.org
+		 2f 63 6f 70 79 6c 65 66 74 2f  >  /copyleft/
+		 67 70 6c 2e 6b 6f 2e 68 74 6d  >  gpl.ko.htm
+		 6c                             > l
+Name table  31.	 PlatformID:	 1
+		 EncodingID:	 3
+		 LanguageID:	 23
+		 NameID:	 19
+		 Length:	 15
+		 Offset:	 998
+		 47 4e 55 20 69 73 20 4e 6f 74  >  GNU is Not
+		 20 55 6e 69 78                 >  Unix
+Name table  32.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 0
+		 Length:	 72
+		 Offset:	 1013
+		 00 43 00 6f 00 70 00 79 00 72  >  .C.o.p.y.r
+		 00 69 00 67 00 68 00 74 00 20  >  .i.g.h.t. 
+		 00 a9 00 20 00 31 00 39 00 39  >  ... .1.9.9
+		 00 38 00 2d 00 32 00 30 00 30  >  .8.-.2.0.0
+		 00 38 00 20 00 62 00 79 00 20  >  .8. .b.y. 
+		 00 4b 00 6f 00 61 00 75 00 6e  >  .K.o.a.u.n
+		 00 67 00 68 00 69 00 20 00 55  >  .g.h.i. .U
+		 00 6e                          > .n
+Name table  33.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 1
+		 Length:	 10
+		 Offset:	 1085
+		 00 55 00 6e 00 42 00 6f 00 6d  >  .U.n.B.o.m
+		                                > 
+Name table  34.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 2
+		 Length:	 8
+		 Offset:	 1095
+		 00 42 00 6f 00 6c 00 64        > .B.o.l.d
+Name table  35.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 3
+		 Length:	 58
+		 Offset:	 1103
+		 00 46 00 6f 00 6e 00 74 00 46  >  .F.o.n.t.F
+		 00 6f 00 72 00 67 00 65 00 20  >  .o.r.g.e. 
+		 00 3a 00 20 00 55 00 6e 00 20  >  .:. .U.n. 
+		 00 42 00 6f 00 6d 00 20 00 3a  >  .B.o.m. .:
+		 00 20 00 38 00 2d 00 36 00 2d  >  . .8.-.6.-
+		 00 32 00 30 00 30 00 38        > .2.0.0.8
+Name table  36.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 4
+		 Length:	 12
+		 Offset:	 1161
+		 00 55 00 6e 00 20 00 42 00 6f  >  .U.n. .B.o
+		 00 6d                          > .m
+Name table  37.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 5
+		 Length:	 24
+		 Offset:	 1173
+		 00 56 00 65 00 72 00 73 00 69  >  .V.e.r.s.i
+		 00 6f 00 6e 00 20 00 31 00 2e  >  .o.n. .1..
+		 00 30 00 32                    > .0.2
+Name table  38.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 6
+		 Length:	 10
+		 Offset:	 1197
+		 00 55 00 6e 00 42 00 6f 00 6d  >  .U.n.B.o.m
+		                                > 
+Name table  39.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 7
+		 Length:	 16
+		 Offset:	 1207
+		 00 55 00 6e 00 20 00 46 00 6f  >  .U.n. .F.o
+		 00 6e 00 74 00 73              > .n.t.s
+Name table  40.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 8
+		 Length:	 78
+		 Offset:	 1223
+		 00 43 00 6f 00 76 00 65 00 72  >  .C.o.v.e.r
+		 00 74 00 65 00 64 00 20 00 74  >  .t.e.d. .t
+		 00 6f 00 20 00 54 00 72 00 75  >  .o. .T.r.u
+		 00 65 00 54 00 79 00 70 00 65  >  .e.T.y.p.e
+		 00 20 00 62 00 79 00 20 00 77  >  . .b.y. .w
+		 00 6b 00 70 00 61 00 72 00 6b  >  .k.p.a.r.k
+		 00 40 00 6b 00 6c 00 64 00 70  >  .@.k.l.d.p
+		 00 2e 00 6f 00 72 00 67        > ...o.r.g
+Name table  41.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 9
+		 Length:	 22
+		 Offset:	 1301
+		 00 4b 00 6f 00 61 00 75 00 6e  >  .K.o.a.u.n
+		 00 67 00 68 00 69 00 20 00 55  >  .g.h.i. .U
+		 00 6e                          > .n
+Name table  42.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 10
+		 Length:	 388
+		 Offset:	 1323
+		 00 54 00 68 00 69 00 73 00 20  >  .T.h.i.s. 
+		 00 69 00 73 00 20 00 74 00 68  >  .i.s. .t.h
+		 00 65 00 20 00 48 00 4c 00 61  >  .e. .H.L.a
+		 00 54 00 65 00 58 00 20 00 66  >  .T.e.X. .f
+		 00 6f 00 6e 00 74 00 73 00 20  >  .o.n.t.s. 
+		 00 6d 00 61 00 64 00 65 00 20  >  .m.a.d.e. 
+		 00 62 00 79 00 20 00 4b 00 6f  >  .b.y. .K.o
+		 00 61 00 75 00 6e 00 67 00 68  >  .a.u.n.g.h
+		 00 69 00 20 00 55 00 6e 00 2e  >  .i. .U.n..
+		 00 20 00 49 00 74 00 20 00 6f  >  . .I.t. .o
+		 00 72 00 69 00 67 00 69 00 6e  >  .r.i.g.i.n
+		 00 61 00 6c 00 6c 00 79 00 20  >  .a.l.l.y. 
+		 00 75 00 73 00 65 00 64 00 20  >  .u.s.e.d. 
+		 00 6f 00 6e 00 20 00 74 00 68  >  .o.n. .t.h
+		 00 65 00 20 00 48 00 4c 00 61  >  .e. .H.L.a
+		 00 54 00 65 00 58 00 20 00 6f  >  .T.e.X. .o
+		 00 6e 00 6c 00 79 00 2e 00 20  >  .n.l.y... 
+		 00 49 00 74 00 20 00 63 00 6f  >  .I.t. .c.o
+		 00 6e 00 74 00 61 00 69 00 6e  >  .n.t.a.i.n
+		 00 73 00 20 00 61 00 6c 00 6c  >  .s. .a.l.l
+		 00 20 00 48 00 61 00 6e 00 67  >  . .H.a.n.g
+		 00 75 00 6c 00 20 00 53 00 79  >  .u.l. .S.y
+		 00 6c 00 6c 00 61 00 62 00 6c  >  .l.l.a.b.l
+		 00 65 00 73 00 20 00 64 00 65  >  .e.s. .d.e
+		 00 66 00 69 00 6e 00 65 00 64  >  .f.i.n.e.d
+		 00 20 00 69 00 6e 00 20 00 74  >  . .i.n. .t
+		 00 68 00 65 00 20 00 55 00 6e  >  .h.e. .U.n
+		 00 69 00 63 00 6f 00 64 00 65  >  .i.c.o.d.e
+		 00 2e 00 20 00 49 00 74 00 20  >  ... .I.t. 
+		 00 69 00 73 00 20 00 63 00 6f  >  .i.s. .c.o
+		 00 6e 00 76 00 65 00 72 00 74  >  .n.v.e.r.t
+		 00 65 00 64 00 20 00 74 00 6f  >  .e.d. .t.o
+		 00 20 00 54 00 72 00 75 00 65  >  . .T.r.u.e
+		 00 54 00 79 00 70 00 65 00 20  >  .T.y.p.e. 
+		 00 66 00 6f 00 6e 00 74 00 73  >  .f.o.n.t.s
+		 00 20 00 77 00 69 00 74 00 68  >  . .w.i.t.h
+		 00 20 00 74 00 68 00 65 00 20  >  . .t.h.e. 
+		 00 46 00 6f 00 6e 00 74 00 46  >  .F.o.n.t.F
+		 00 6f 00 72 00 67 00 65        > .o.r.g.e
+Name table  43.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 11
+		 Length:	 66
+		 Offset:	 1711
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6c 00 64  >  ././.k.l.d
+		 00 70 00 2e 00 6e 00 65 00 74  >  .p...n.e.t
+		 00 2f 00 70 00 72 00 6f 00 6a  >  ./.p.r.o.j
+		 00 65 00 63 00 74 00 73 00 2f  >  .e.c.t.s./
+		 00 75 00 6e 00 66 00 6f 00 6e  >  .u.n.f.o.n
+		 00 74 00 73 00 2f              > .t.s./
+Name table  44.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 12
+		 Length:	 66
+		 Offset:	 1777
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6c 00 64  >  ././.k.l.d
+		 00 70 00 2e 00 6e 00 65 00 74  >  .p...n.e.t
+		 00 2f 00 70 00 72 00 6f 00 6a  >  ./.p.r.o.j
+		 00 65 00 63 00 74 00 73 00 2f  >  .e.c.t.s./
+		 00 75 00 6e 00 66 00 6f 00 6e  >  .u.n.f.o.n
+		 00 74 00 73 00 2f              > .t.s./
+Name table  45.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 13
+		 Length:	 36
+		 Offset:	 1843
+		 00 47 00 4e 00 55 00 20 00 50  >  .G.N.U. .P
+		 00 75 00 62 00 6c 00 69 00 63  >  .u.b.l.i.c
+		 00 20 00 4c 00 69 00 63 00 65  >  . .L.i.c.e
+		 00 6e 00 73 00 65              > .n.s.e
+Name table  46.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 14
+		 Length:	 82
+		 Offset:	 1879
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6f 00 72  >  ././.k.o.r
+		 00 65 00 61 00 2e 00 67 00 6e  >  .e.a...g.n
+		 00 75 00 2e 00 6f 00 72 00 67  >  .u...o.r.g
+		 00 2f 00 63 00 6f 00 70 00 79  >  ./.c.o.p.y
+		 00 6c 00 65 00 66 00 74 00 2f  >  .l.e.f.t./
+		 00 67 00 70 00 6c 00 2e 00 6b  >  .g.p.l...k
+		 00 6f 00 2e 00 68 00 74 00 6d  >  .o...h.t.m
+		 00 6c                          > .l
+Name table  47.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1033
+		 NameID:	 19
+		 Length:	 30
+		 Offset:	 1961
+		 00 47 00 4e 00 55 00 20 00 69  >  .G.N.U. .i
+		 00 73 00 20 00 4e 00 6f 00 74  >  .s. .N.o.t
+		 00 20 00 55 00 6e 00 69 00 78  >  . .U.n.i.x
+		                                > 
+Name table  48.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 0
+		 Length:	 72
+		 Offset:	 1991
+		 00 43 00 6f 00 70 00 79 00 72  >  .C.o.p.y.r
+		 00 69 00 67 00 68 00 74 00 20  >  .i.g.h.t. 
+		 00 a9 00 20 00 31 00 39 00 39  >  ... .1.9.9
+		 00 38 00 2d 00 32 00 30 00 30  >  .8.-.2.0.0
+		 00 38 00 20 00 62 00 79 00 20  >  .8. .b.y. 
+		 00 4b 00 6f 00 61 00 75 00 6e  >  .K.o.a.u.n
+		 00 67 00 68 00 69 00 20 00 55  >  .g.h.i. .U
+		 00 6e                          > .n
+Name table  49.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 1
+		 Length:	 6
+		 Offset:	 2063
+		 c7 40 00 20 bd 04              > .@. ..
+Name table  50.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 2
+		 Length:	 14
+		 Offset:	 2069
+		 00 52 00 65 00 67 00 75 00 6c  >  .R.e.g.u.l
+		 00 61 00 72                    > .a.r
+Name table  51.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 4
+		 Length:	 6
+		 Offset:	 2083
+		 c7 40 00 20 bd 04              > .@. ..
+Name table  52.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 5
+		 Length:	 24
+		 Offset:	 2089
+		 00 56 00 65 00 72 00 73 00 69  >  .V.e.r.s.i
+		 00 6f 00 6e 00 20 00 31 00 2e  >  .o.n. .1..
+		 00 30 00 32                    > .0.2
+Name table  53.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 6
+		 Length:	 10
+		 Offset:	 2113
+		 00 55 00 6e 00 42 00 6f 00 6d  >  .U.n.B.o.m
+		                                > 
+Name table  54.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 7
+		 Length:	 16
+		 Offset:	 2123
+		 00 55 00 6e 00 20 00 46 00 6f  >  .U.n. .F.o
+		 00 6e 00 74 00 73              > .n.t.s
+Name table  55.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 8
+		 Length:	 78
+		 Offset:	 2139
+		 00 43 00 6f 00 76 00 65 00 72  >  .C.o.v.e.r
+		 00 74 00 65 00 64 00 20 00 74  >  .t.e.d. .t
+		 00 6f 00 20 00 54 00 72 00 75  >  .o. .T.r.u
+		 00 65 00 54 00 79 00 70 00 65  >  .e.T.y.p.e
+		 00 20 00 62 00 79 00 20 00 77  >  . .b.y. .w
+		 00 6b 00 70 00 61 00 72 00 6b  >  .k.p.a.r.k
+		 00 40 00 6b 00 6c 00 64 00 70  >  .@.k.l.d.p
+		 00 2e 00 6f 00 72 00 67        > ...o.r.g
+Name table  56.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 9
+		 Length:	 22
+		 Offset:	 2217
+		 00 4b 00 6f 00 61 00 75 00 6e  >  .K.o.a.u.n
+		 00 67 00 68 00 69 00 20 00 55  >  .g.h.i. .U
+		 00 6e                          > .n
+Name table  57.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 10
+		 Length:	 490
+		 Offset:	 2239
+		 00 54 00 68 00 69 00 73 00 20  >  .T.h.i.s. 
+		 00 69 00 73 00 20 00 74 00 68  >  .i.s. .t.h
+		 00 65 00 20 00 48 00 4c 00 61  >  .e. .H.L.a
+		 00 54 00 65 00 58 00 20 00 66  >  .T.e.X. .f
+		 00 6f 00 6e 00 74 00 73 00 20  >  .o.n.t.s. 
+		 00 6d 00 61 00 64 00 65 00 20  >  .m.a.d.e. 
+		 00 62 00 79 00 20 00 4b 00 6f  >  .b.y. .K.o
+		 00 61 00 75 00 6e 00 67 00 68  >  .a.u.n.g.h
+		 00 69 00 20 00 55 00 6e 00 2e  >  .i. .U.n..
+		 00 20 00 49 00 74 00 20 00 6f  >  . .I.t. .o
+		 00 72 00 69 00 67 00 69 00 6e  >  .r.i.g.i.n
+		 00 61 00 6c 00 6c 00 79 00 20  >  .a.l.l.y. 
+		 00 75 00 73 00 65 00 64 00 20  >  .u.s.e.d. 
+		 00 6f 00 6e 00 20 00 74 00 68  >  .o.n. .t.h
+		 00 65 00 20 00 48 00 4c 00 61  >  .e. .H.L.a
+		 00 54 00 65 00 58 00 20 00 6f  >  .T.e.X. .o
+		 00 6e 00 6c 00 79 00 2e 00 20  >  .n.l.y... 
+		 00 49 00 74 00 20 00 63 00 6f  >  .I.t. .c.o
+		 00 6e 00 74 00 61 00 69 00 6e  >  .n.t.a.i.n
+		 00 73 00 20 00 61 00 6c 00 6c  >  .s. .a.l.l
+		 00 20 00 48 00 61 00 6e 00 67  >  . .H.a.n.g
+		 00 75 00 6c 00 20 00 53 00 79  >  .u.l. .S.y
+		 00 6c 00 6c 00 61 00 62 00 6c  >  .l.l.a.b.l
+		 00 65 00 73 00 20 00 64 00 65  >  .e.s. .d.e
+		 00 66 00 69 00 6e 00 65 00 64  >  .f.i.n.e.d
+		 00 20 00 69 00 6e 00 20 00 74  >  . .i.n. .t
+		 00 68 00 65 00 20 00 55 00 6e  >  .h.e. .U.n
+		 00 69 00 63 00 6f 00 64 00 65  >  .i.c.o.d.e
+		 00 2e 00 20 00 49 00 74 00 20  >  ... .I.t. 
+		 00 69 00 73 00 20 00 63 00 6f  >  .i.s. .c.o
+		 00 6e 00 76 00 65 00 72 00 74  >  .n.v.e.r.t
+		 00 65 00 64 00 20 00 74 00 6f  >  .e.d. .t.o
+		 00 20 00 54 00 72 00 75 00 65  >  . .T.r.u.e
+		 00 54 00 79 00 70 00 65 00 20  >  .T.y.p.e. 
+		 00 66 00 6f 00 6e 00 74 00 73  >  .f.o.n.t.s
+		 00 20 00 77 00 69 00 74 00 68  >  . .w.i.t.h
+		 00 20 00 74 00 68 00 65 00 20  >  . .t.h.e. 
+		 00 46 00 6f 00 6e 00 74 00 46  >  .F.o.n.t.F
+		 00 6f 00 72 00 67 00 65 00 2e  >  .o.r.g.e..
+		 00 20 00 59 00 6f 00 75 00 20  >  . .Y.o.u. 
+		 00 63 00 61 00 6e 00 20 00 66  >  .c.a.n. .f
+		 00 72 00 65 00 65 00 6c 00 79  >  .r.e.e.l.y
+		 00 20 00 72 00 65 00 64 00 69  >  . .r.e.d.i
+		 00 73 00 74 00 72 00 69 00 62  >  .s.t.r.i.b
+		 00 75 00 74 00 65 00 20 00 69  >  .u.t.e. .i
+		 00 74 00 20 00 75 00 6e 00 64  >  .t. .u.n.d
+		 00 65 00 72 00 20 00 74 00 68  >  .e.r. .t.h
+		 00 65 00 20 00 47 00 4e 00 55  >  .e. .G.N.U
+		 00 20 00 47 00 50 00 4c 00 2e  >  . .G.P.L..
+		                                > 
+Name table  58.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 11
+		 Length:	 66
+		 Offset:	 2729
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6c 00 64  >  ././.k.l.d
+		 00 70 00 2e 00 6e 00 65 00 74  >  .p...n.e.t
+		 00 2f 00 70 00 72 00 6f 00 6a  >  ./.p.r.o.j
+		 00 65 00 63 00 74 00 73 00 2f  >  .e.c.t.s./
+		 00 75 00 6e 00 66 00 6f 00 6e  >  .u.n.f.o.n
+		 00 74 00 73 00 2f              > .t.s./
+Name table  59.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 12
+		 Length:	 66
+		 Offset:	 2795
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6c 00 64  >  ././.k.l.d
+		 00 70 00 2e 00 6e 00 65 00 74  >  .p...n.e.t
+		 00 2f 00 70 00 72 00 6f 00 6a  >  ./.p.r.o.j
+		 00 65 00 63 00 74 00 73 00 2f  >  .e.c.t.s./
+		 00 75 00 6e 00 66 00 6f 00 6e  >  .u.n.f.o.n
+		 00 74 00 73 00 2f              > .t.s./
+Name table  60.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 13
+		 Length:	 52
+		 Offset:	 2861
+		 00 47 00 4e 00 55 00 20 00 47  >  .G.N.U. .G
+		 00 65 00 6e 00 65 00 72 00 61  >  .e.n.e.r.a
+		 00 6c 00 20 00 50 00 75 00 62  >  .l. .P.u.b
+		 00 6c 00 69 00 63 00 20 00 4c  >  .l.i.c. .L
+		 00 69 00 63 00 65 00 6e 00 73  >  .i.c.e.n.s
+		 00 65                          > .e
+Name table  61.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 14
+		 Length:	 82
+		 Offset:	 2913
+		 00 68 00 74 00 74 00 70 00 3a  >  .h.t.t.p.:
+		 00 2f 00 2f 00 6b 00 6f 00 72  >  ././.k.o.r
+		 00 65 00 61 00 2e 00 67 00 6e  >  .e.a...g.n
+		 00 75 00 2e 00 6f 00 72 00 67  >  .u...o.r.g
+		 00 2f 00 63 00 6f 00 70 00 79  >  ./.c.o.p.y
+		 00 6c 00 65 00 66 00 74 00 2f  >  .l.e.f.t./
+		 00 67 00 70 00 6c 00 2e 00 6b  >  .g.p.l...k
+		 00 6f 00 2e 00 68 00 74 00 6d  >  .o...h.t.m
+		 00 6c                          > .l
+Name table  62.	 PlatformID:	 3
+		 EncodingID:	 1
+		 LanguageID:	 1042
+		 NameID:	 19
+		 Length:	 30
+		 Offset:	 2995
+		 00 47 00 4e 00 55 00 20 00 69  >  .G.N.U. .i
+		 00 73 00 20 00 4e 00 6f 00 74  >  .s. .N.o.t
+		 00 20 00 55 00 6e 00 69 00 78  >  . .U.n.i.x
+		                                > 
+
+'post' Table - PostScript
+-------------------------
+	 'post' format:		 2.0
+	 italicAngle:		 0.0
+	 underlinePosition:	 -125
+	 underlineThichness:	 50
+	 isFixedPitch:		 0d
+	 minMemType42:		 0d
+	 maxMemType42:		 0d
+	 minMemType1:		 0d
+	 maxMemType1:		 0d
+	 Format 2.0:  Non-Standard (for PostScript) TrueType Glyph Set.
+		 numGlyphs:	 8
+		 Glyf   0  -> PSGlyf Name #   1, 'uniBC31'
+		 Glyf   1  -> PSGlyf Name #   2, 'jamo0235'
+		 Glyf   2  -> PSGlyf Name #   3, 'jamo0662'
+		 Glyf   3  -> PSGlyf Name #   4, 'jamo0458'
+		 Glyf   4  -> PSGlyf Name #   5, 'uniC1A1'
+		 Glyf   5  -> PSGlyf Name #   6, 'jamo0256'
+		 Glyf   6  -> PSGlyf Name #   7, 'jamo0736'
+		 Glyf   7  -> PSGlyf Name #   8, 'jamo0496'
+'OS/2' Table - OS/2 and Windows Metrics
+---------------------------------------
+	 'OS/2' version:	 1
+	 xAvgCharWidth:		 451
+	 usWeightClass:		 700 	 'Bold'
+	 usWidthClass:		 5 	 'Medium'
+	 fsType:		 12
+	 ySubscriptXSize:	 650
+	 ySubscriptYSize:	 699
+	 ySubscriptXOffset:	 0
+	 ySubscriptYOffset:	 140
+	 ySuperscriptXSize:	 650
+	 ySuperscriptYSize:	 699
+	 ySuperscriptXOffset:	 0
+	 ySuperscriptYOffset:	 479
+	 yStrikeoutSize:	 49
+	 yStrikeoutPosition	 258
+	 sFamilyClass:	 0 	 subclass = 0
+	 PANOSE:
+		 Family Kind:	 4 	 'Decorative'
+		 Serif Style:	 11 	 'Normal Sans'
+		 Weight:	 8 	 'Bold'
+		 Proportion:	 0 	 'Any'
+		 Contrast:	 0 	 'Any'
+		 Stroke:	 1 	 'No Fit'
+		 Arm Style:	 1 	 'No FitStraight Arms/Horizontal'
+		 Lettreform:	 1 	 'No Fit'
+		 Midline:	 1 	 'No Fit'
+		 X-height:	 1 	 'No Fit'
+	 Unicode Range 1( Bits 0 - 31 ): 	 0x900002a7
+	 Unicode Range 2( Bits 32 - 63 ): 	 0x01d77dfb
+	 Unicode Range 3( Bits 64 - 95 ): 	 0x00000010
+	 Unicode Range 4( Bits 96 - 128 ): 	 0x00000000
+	 achVendID:		 'PfEd'
+	 fsSelection:		 0x0020 	 'Bold '
+	 usFirstCharIndex:	 0x0020
+ 	 usLastCharIndex:	 0xffe6
+	 sTypoAscender:		 800
+	 sTypoDescender:	 -200
+	 sTypoLineGap:		 0
+	 usWinAscent:		 963
+	 usWinDescent:		 250
+	 CodePage Range 1( Bits 0 - 31 ):	 0x602a000d
+	 CodePage Range 2( Bits 32- 63 ):	 0x12d70000
+'cvt ' Table - Control Value Table
+----------------------------------
+Size = 58 bytes, 29 entries
+	    0. 	 -171
+	    1. 	 0
+	    2. 	 508
+	    3. 	 686
+	    4. 	 720
+	    5. 	 103
+	    6. 	 68
+	    7. 	 140
+	    8. 	 93
+	    9. 	 100
+	   10. 	 124
+	   11. 	 117
+	   12. 	 121
+	   13. 	 130
+	   14. 	 158
+	   15. 	 126
+	   16. 	 145
+	   17. 	 150
+	   18. 	 156
+	   19. 	 163
+	   20. 	 132
+	   21. 	 89
+	   22. 	 105
+	   23. 	 142
+	   24. 	 128
+	   25. 	 109
+	   26. 	 78
+	   27. 	 70
+	   28. 	 75
+
+'gasp' Table - Grid-fitting And Scan-conversion Procedure
+---------------------------------------------------------
+'gasp' version:	 0
+numRanges: 	 3
+
+	 gasp Range 0
+	 rangeMaxPPEM:	 13
+	 rangeGaspBehavior:	 0x0002
+
+	 gasp Range 1
+	 rangeMaxPPEM:	 16
+	 rangeGaspBehavior:	 0x0003
+
+	 gasp Range 2
+	 rangeMaxPPEM:	 65535
+	 rangeGaspBehavior:	 0x0002
+
+
+Glyph      0.
+	 numberOfContours:	 -1  (Composite)
+	 xMin:			 143
+	 yMin:			 -138
+	 xMax:			 853
+	 yMax:			 740
+
+	 0: Flags:	 0x1026
+	    Glyf Index:	 1
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+	 1: Flags:	 0x1026
+	    Glyf Index:	 2
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+	 2: Flags:	 0x1006
+	    Glyf Index:	 3
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+
+Glyph      1.
+	 numberOfContours:	 2
+	 xMin:			 143
+	 yMin:			 260
+	 xMax:			 547
+	 yMax:			 717
+
+	 EndPoints
+	 ---------
+	  0: 24
+	  1: 34
+
+	 Length of Instructions: 76
+
+	 Flags
+	 -----
+	  0:                                        On
+	  1:        XDual           Y-Short         Off
+	  2:                Repeat  Y-Short X-Short On
+	  3:                Repeat  Y-Short X-Short On
+	  4: YDual  XDual           Y-Short X-Short On
+	  5:                        Y-Short X-Short Off
+	  6: YDual                          X-Short On
+	  7: YDual                          X-Short Off
+	  8: YDual                  Y-Short X-Short On
+	  9: YDual          Repeat  Y-Short X-Short Off
+	 10: YDual          Repeat  Y-Short X-Short Off
+	 11: YDual          Repeat  Y-Short X-Short Off
+	 12: YDual          Repeat  Y-Short X-Short Off
+	 13: YDual          Repeat  Y-Short X-Short Off
+	 14: YDual          Repeat  Y-Short X-Short Off
+	 15: YDual  XDual           Y-Short X-Short Off
+	 16: YDual  XDual   Repeat  Y-Short         On
+	 17: YDual  XDual   Repeat  Y-Short         On
+	 18: YDual  XDual           Y-Short X-Short On
+	 19:                        Y-Short X-Short Off
+	 20:        XDual           Y-Short         On
+	 21: YDual  XDual           Y-Short X-Short On
+	 22: YDual  XDual           Y-Short         Off
+	 23: YDual                  Y-Short X-Short Off
+	 24: YDual  XDual           Y-Short         On
+	 25:                Repeat  Y-Short X-Short On
+	 26:                Repeat  Y-Short X-Short On
+	 27:        XDual           Y-Short         Off
+	 28:        XDual           Y-Short X-Short On
+	 29:        XDual           Y-Short X-Short Off
+	 30: YDual  XDual                   X-Short On
+	 31: YDual  XDual                   X-Short Off
+	 32: YDual  XDual           Y-Short X-Short Off
+	 33: YDual  XDual           Y-Short X-Short On
+	 34: YDual  XDual           Y-Short X-Short Off
+
+	 Coordinates
+	 -----------
+	  0 Rel (    547,    717) -> Abs (    547,    717)
+	  1 Rel (      0,   -204) -> Abs (    547,    513)
+	  2 Rel (    -90,   -234) -> Abs (    457,    279)
+	  3 Rel (    -52,    -19) -> Abs (    405,    260)
+	  4 Rel (     12,     75) -> Abs (    417,    335)
+	  5 Rel (    -72,    -72) -> Abs (    345,    263)
+	  6 Rel (    -76,      0) -> Abs (    269,    263)
+	  7 Rel (    -34,      0) -> Abs (    235,    263)
+	  8 Rel (    -25,     15) -> Abs (    210,    278)
+	  9 Rel (    -14,      9) -> Abs (    196,    287)
+	 10 Rel (    -23,     37) -> Abs (    173,    324)
+	 11 Rel (    -13,     46) -> Abs (    160,    370)
+	 12 Rel (    -10,     57) -> Abs (    150,    427)
+	 13 Rel (     -4,     56) -> Abs (    146,    483)
+	 14 Rel (     -3,     54) -> Abs (    143,    537)
+	 15 Rel (      1,     45) -> Abs (    144,    582)
+	 16 Rel (      0,     16) -> Abs (    144,    598)
+	 17 Rel (      0,     86) -> Abs (    144,    684)
+	 18 Rel (    107,     30) -> Abs (    251,    714)
+	 19 Rel (     -9,    -68) -> Abs (    242,    646)
+	 20 Rel (      0,    -92) -> Abs (    242,    554)
+	 21 Rel (    200,     28) -> Abs (    442,    582)
+	 22 Rel (      0,     18) -> Abs (    442,    600)
+	 23 Rel (     -3,     76) -> Abs (    439,    676)
+	 24 Rel (      0,     18) -> Abs (    439,    694)
+	 25 Rel (     -1,   -171) -> Abs (    438,    523)
+	 26 Rel (   -196,    -26) -> Abs (    242,    497)
+	 27 Rel (      0,   -101) -> Abs (    242,    396)
+	 28 Rel (      4,    -28) -> Abs (    246,    368)
+	 29 Rel (      8,    -50) -> Abs (    254,    318)
+	 30 Rel (     37,      0) -> Abs (    291,    318)
+	 31 Rel (     32,      0) -> Abs (    323,    318)
+	 32 Rel (     89,     75) -> Abs (    412,    393)
+	 33 Rel (     17,     32) -> Abs (    429,    425)
+	 34 Rel (      9,     18) -> Abs (    438,    443)
+
+Glyph      2.
+	 numberOfContours:	 1
+	 xMin:			 247
+	 yMin:			 -138
+	 xMax:			 833
+	 yMax:			 230
+
+	 EndPoints
+	 ---------
+	  0: 17
+
+	 Length of Instructions: 34
+
+	 Flags
+	 -----
+	  0: YDual                  Y-Short         On
+	  1:        XDual           Y-Short         Off
+	  2:                        Y-Short X-Short On
+	  3: YDual                  Y-Short X-Short On
+	  4: YDual  XDual   Repeat  Y-Short X-Short Off
+	  5: YDual  XDual   Repeat  Y-Short X-Short Off
+	  6: YDual  XDual           Y-Short         On
+	  7: YDual  XDual           Y-Short         Off
+	  8: YDual                  Y-Short X-Short Off
+	  9: YDual                          X-Short On
+	 10: YDual                          X-Short Off
+	 11:                        Y-Short X-Short On
+	 12: YDual                  Y-Short X-Short On
+	 13: YDual                  Y-Short         Off
+	 14: YDual  XDual                   X-Short On
+	 15: YDual  XDual                   X-Short Off
+	 16:        XDual           Y-Short X-Short On
+	 17:        XDual           Y-Short X-Short Off
+
+	 Coordinates
+	 -----------
+	  0 Rel (    833,    119) -> Abs (    833,    119)
+	  1 Rel (      0,   -107) -> Abs (    833,     12)
+	  2 Rel (    -62,   -150) -> Abs (    771,   -138)
+	  3 Rel (   -114,     17) -> Abs (    657,   -121)
+	  4 Rel (     24,     54) -> Abs (    681,    -67)
+	  5 Rel (     47,    145) -> Abs (    728,     78)
+	  6 Rel (      0,     41) -> Abs (    728,    119)
+	  7 Rel (      0,     34) -> Abs (    728,    153)
+	  8 Rel (    -40,     25) -> Abs (    688,    178)
+	  9 Rel (    -36,      0) -> Abs (    652,    178)
+	 10 Rel (   -117,      0) -> Abs (    535,    178)
+	 11 Rel (   -235,   -124) -> Abs (    300,     54)
+	 12 Rel (    -53,     94) -> Abs (    247,    148)
+	 13 Rel (    275,     82) -> Abs (    522,    230)
+	 14 Rel (    153,      0) -> Abs (    675,    230)
+	 15 Rel (    132,      0) -> Abs (    807,    230)
+	 16 Rel (     21,    -64) -> Abs (    828,    166)
+	 17 Rel (      5,    -18) -> Abs (    833,    148)
+
+Glyph      3.
+	 numberOfContours:	 1
+	 xMin:			 579
+	 yMin:			 269
+	 xMax:			 853
+	 yMax:			 740
+
+	 EndPoints
+	 ---------
+	  0: 23
+
+	 Length of Instructions: 43
+
+	 Flags
+	 -----
+	  0:                                        On
+	  1:                        Y-Short X-Short Off
+	  2:        XDual           Y-Short         On
+	  3:        XDual           Y-Short         Off
+	  4:        XDual           Y-Short X-Short On
+	  5:                        Y-Short X-Short On
+	  6: YDual  XDual           Y-Short         Off
+	  7: YDual  XDual           Y-Short X-Short On
+	  8:                        Y-Short X-Short On
+	  9:        XDual           Y-Short         On
+	 10:        XDual           Y-Short         Off
+	 11:        XDual           Y-Short X-Short On
+	 12:                        Y-Short X-Short On
+	 13: YDual  XDual           Y-Short X-Short Off
+	 14: YDual  XDual           Y-Short         On
+	 15: YDual  XDual           Y-Short         Off
+	 16: YDual                  Y-Short X-Short On
+	 17: YDual  XDual           Y-Short X-Short On
+	 18:                        Y-Short X-Short Off
+	 19:        XDual           Y-Short         On
+	 20: YDual  XDual           Y-Short X-Short On
+	 21: YDual  XDual           Y-Short         On
+	 22: YDual  XDual           Y-Short         Off
+	 23: YDual                  Y-Short X-Short On
+
+	 Coordinates
+	 -----------
+	  0 Rel (    853,    740) -> Abs (    853,    740)
+	  1 Rel (    -30,   -115) -> Abs (    823,    625)
+	  2 Rel (      0,   -108) -> Abs (    823,    517)
+	  3 Rel (      0,    -99) -> Abs (    823,    418)
+	  4 Rel (     25,   -120) -> Abs (    848,    298)
+	  5 Rel (   -108,    -29) -> Abs (    740,    269)
+	  6 Rel (      0,     72) -> Abs (    740,    341)
+	  7 Rel (      2,    142) -> Abs (    742,    483)
+	  8 Rel (    -62,     -6) -> Abs (    680,    477)
+	  9 Rel (      0,    -56) -> Abs (    680,    421)
+	 10 Rel (      0,    -75) -> Abs (    680,    346)
+	 11 Rel (      6,    -49) -> Abs (    686,    297)
+	 12 Rel (   -107,    -27) -> Abs (    579,    270)
+	 13 Rel (     22,    141) -> Abs (    601,    411)
+	 14 Rel (      0,     92) -> Abs (    601,    503)
+	 15 Rel (      0,     99) -> Abs (    601,    602)
+	 16 Rel (    -21,    115) -> Abs (    580,    717)
+	 17 Rel (    107,     21) -> Abs (    687,    738)
+	 18 Rel (     -7,    -94) -> Abs (    680,    644)
+	 19 Rel (      0,   -106) -> Abs (    680,    538)
+	 20 Rel (     61,      5) -> Abs (    741,    543)
+	 21 Rel (      0,    147) -> Abs (    741,    690)
+	 22 Rel (      0,     13) -> Abs (    741,    703)
+	 23 Rel (     -4,     20) -> Abs (    737,    723)
+
+Glyph      4.
+	 numberOfContours:	 -1  (Composite)
+	 xMin:			 93
+	 yMin:			 -137
+	 xMax:			 892
+	 yMax:			 749
+
+	 0: Flags:	 0x1026
+	    Glyf Index:	 5
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+	 1: Flags:	 0x1026
+	    Glyf Index:	 6
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+	 2: Flags:	 0x1006
+	    Glyf Index:	 7
+	    X BOffset:	 0
+	    Y BOffset:	 0
+	    Others:	 Round X,Y to Grid                                 
+
+
+Glyph      5.
+	 numberOfContours:	 1
+	 xMin:			 137
+	 yMin:			 405
+	 xMax:			 881
+	 yMax:			 749
+
+	 EndPoints
+	 ---------
+	  0: 20
+
+	 Length of Instructions:  0
+
+	 Flags
+	 -----
+	  0:                                        On
+	  1:                        Y-Short X-Short On
+	  2: YDual          Repeat  Y-Short X-Short Off
+	  3: YDual          Repeat  Y-Short X-Short Off
+	  4: YDual          Repeat  Y-Short X-Short Off
+	  5: YDual          Repeat  Y-Short X-Short Off
+	  6: YDual          Repeat  Y-Short X-Short Off
+	  7: YDual                  Y-Short X-Short On
+	  8:                        Y-Short X-Short Off
+	  9:                        Y-Short X-Short On
+	 10: YDual                  Y-Short X-Short On
+	 11: YDual  XDual           Y-Short X-Short Off
+	 12: YDual  XDual           Y-Short X-Short On
+	 13: YDual  XDual   Repeat  Y-Short X-Short Off
+	 14: YDual  XDual   Repeat  Y-Short X-Short Off
+	 15: YDual  XDual           Y-Short X-Short On
+	 16:        XDual           Y-Short X-Short On
+	 17:                        Y-Short X-Short On
+	 18:        XDual   Repeat  Y-Short X-Short Off
+	 19:        XDual   Repeat  Y-Short X-Short Off
+	 20:        XDual   Repeat  Y-Short X-Short Off
+
+	 Coordinates
+	 -----------
+	  0 Rel (    881,    506) -> Abs (    881,    506)
+	  1 Rel (    -93,    -82) -> Abs (    788,    424)
+	  2 Rel (    -32,     16) -> Abs (    756,    440)
+	  3 Rel (    -59,     28) -> Abs (    697,    468)
+	  4 Rel (    -62,     34) -> Abs (    635,    502)
+	  5 Rel (    -55,     34) -> Abs (    580,    536)
+	  6 Rel (    -56,     43) -> Abs (    524,    579)
+	  7 Rel (    -24,     24) -> Abs (    500,    603)
+	  8 Rel (   -134,   -109) -> Abs (    366,    494)
+	  9 Rel (   -176,    -89) -> Abs (    190,    405)
+	 10 Rel (    -53,     36) -> Abs (    137,    441)
+	 11 Rel (     36,     11) -> Abs (    173,    452)
+	 12 Rel (     54,     35) -> Abs (    227,    487)
+	 13 Rel (     80,     50) -> Abs (    307,    537)
+	 14 Rel (    131,    135) -> Abs (    438,    672)
+	 15 Rel (     31,     77) -> Abs (    469,    749)
+	 16 Rel (    114,    -34) -> Abs (    583,    715)
+	 17 Rel (    -52,    -76) -> Abs (    531,    639)
+	 18 Rel (     48,    -37) -> Abs (    579,    602)
+	 19 Rel (    123,    -53) -> Abs (    702,    549)
+	 20 Rel (    113,    -26) -> Abs (    815,    523)
+
+Glyph      6.
+	 numberOfContours:	 1
+	 xMin:			 204
+	 yMin:			 -137
+	 xMax:			 783
+	 yMax:			 223
+
+	 EndPoints
+	 ---------
+	  0: 47
+
+	 Length of Instructions: 106
+
+	 Flags
+	 -----
+	  0: YDual                  Y-Short         On
+	  1:        XDual           Y-Short         Off
+	  2:                        Y-Short X-Short On
+	  3:                Repeat  Y-Short X-Short Off
+	  4:                Repeat  Y-Short X-Short Off
+	  5:                Repeat  Y-Short X-Short Off
+	  6:                Repeat  Y-Short X-Short Off
+	  7:                Repeat  Y-Short X-Short Off
+	  8: YDual                          X-Short On
+	  9: YDual                          X-Short Off
+	 10: YDual                  Y-Short X-Short Off
+	 11: YDual                  Y-Short X-Short On
+	 12: YDual                  Y-Short X-Short Off
+	 13: YDual  XDual           Y-Short         On
+	 14: YDual  XDual           Y-Short         Off
+	 15: YDual  XDual   Repeat  Y-Short X-Short Off
+	 16: YDual  XDual   Repeat  Y-Short X-Short Off
+	 17: YDual  XDual   Repeat  Y-Short X-Short Off
+	 18: YDual  XDual   Repeat  Y-Short X-Short Off
+	 19: YDual  XDual                   X-Short On
+	 20: YDual  XDual                   X-Short Off
+	 21:        XDual           Y-Short X-Short On
+	 22:                        Y-Short X-Short On
+	 23: YDual                  Y-Short X-Short Off
+	 24: YDual                          X-Short On
+	 25: YDual                          X-Short Off
+	 26:                Repeat  Y-Short X-Short Off
+	 27:                Repeat  Y-Short X-Short Off
+	 28:                Repeat  Y-Short X-Short Off
+	 29:        XDual           Y-Short         On
+	 30:        XDual           Y-Short         Off
+	 31:        XDual           Y-Short X-Short Off
+	 32: YDual  XDual                   X-Short On
+	 33: YDual  XDual                   X-Short Off
+	 34: YDual  XDual   Repeat  Y-Short X-Short Off
+	 35: YDual  XDual   Repeat  Y-Short X-Short Off
+	 36: YDual  XDual   Repeat  Y-Short X-Short Off
+	 37: YDual  XDual           Y-Short         On
+	 38: YDual  XDual           Y-Short         Off
+	 39: YDual                  Y-Short X-Short Off
+	 40: YDual                          X-Short On
+	 41: YDual                          X-Short Off
+	 42:                        Y-Short X-Short On
+	 43: YDual                  Y-Short X-Short Off
+	 44: YDual  XDual           Y-Short         Off
+	 45: YDual  XDual           Y-Short X-Short Off
+	 46: YDual  XDual                   X-Short On
+	 47: YDual  XDual                   X-Short Off
+
+	 Coordinates
+	 -----------
+	  0 Rel (    783,     33) -> Abs (    783,     33)
+	  1 Rel (      0,    -45) -> Abs (    783,    -12)
+	  2 Rel (    -26,    -30) -> Abs (    757,    -42)
+	  3 Rel (    -24,    -28) -> Abs (    733,    -70)
+	  4 Rel (    -69,    -39) -> Abs (    664,   -109)
+	  5 Rel (    -58,    -18) -> Abs (    606,   -127)
+	  6 Rel (    -99,     -9) -> Abs (    507,   -136)
+	  7 Rel (    -44,     -1) -> Abs (    463,   -137)
+	  8 Rel (    -53,      0) -> Abs (    410,   -137)
+	  9 Rel (    -25,      0) -> Abs (    385,   -137)
+	 10 Rel (    -91,     30) -> Abs (    294,   -107)
+	 11 Rel (    -22,     15) -> Abs (    272,    -92)
+	 12 Rel (    -68,     47) -> Abs (    204,    -45)
+	 13 Rel (      0,     91) -> Abs (    204,     46)
+	 14 Rel (      0,     42) -> Abs (    204,     88)
+	 15 Rel (     41,     66) -> Abs (    245,    154)
+	 16 Rel (     62,     37) -> Abs (    307,    191)
+	 17 Rel (     84,     24) -> Abs (    391,    215)
+	 18 Rel (     74,      8) -> Abs (    465,    223)
+	 19 Rel (     38,      0) -> Abs (    503,    223)
+	 20 Rel (     72,      0) -> Abs (    575,    223)
+	 21 Rel (     96,    -27) -> Abs (    671,    196)
+	 22 Rel (    -47,    -34) -> Abs (    624,    162)
+	 23 Rel (    -36,     14) -> Abs (    588,    176)
+	 24 Rel (    -61,      0) -> Abs (    527,    176)
+	 25 Rel (    -40,      0) -> Abs (    487,    176)
+	 26 Rel (    -69,    -13) -> Abs (    418,    163)
+	 27 Rel (    -68,    -29) -> Abs (    350,    134)
+	 28 Rel (    -39,    -60) -> Abs (    311,     74)
+	 29 Rel (      0,    -42) -> Abs (    311,     32)
+	 30 Rel (      0,    -67) -> Abs (    311,    -35)
+	 31 Rel (     93,    -64) -> Abs (    404,    -99)
+	 32 Rel (     71,      0) -> Abs (    475,    -99)
+	 33 Rel (     31,      0) -> Abs (    506,    -99)
+	 34 Rel (     64,     12) -> Abs (    570,    -87)
+	 35 Rel (     64,     26) -> Abs (    634,    -61)
+	 36 Rel (     41,     50) -> Abs (    675,    -11)
+	 37 Rel (      0,     34) -> Abs (    675,     23)
+	 38 Rel (      0,     49) -> Abs (    675,     72)
+	 39 Rel (    -72,     41) -> Abs (    603,    113)
+	 40 Rel (    -52,      0) -> Abs (    551,    113)
+	 41 Rel (    -36,      0) -> Abs (    515,    113)
+	 42 Rel (    -42,     -8) -> Abs (    473,    105)
+	 43 Rel (    -13,      7) -> Abs (    460,    112)
+	 44 Rel (      0,     30) -> Abs (    460,    142)
+	 45 Rel (     85,     15) -> Abs (    545,    157)
+	 46 Rel (     28,      0) -> Abs (    573,    157)
+	 47 Rel (    210,      0) -> Abs (    783,    157)
+
+Glyph      7.
+	 numberOfContours:	 1
+	 xMin:			 93
+	 yMin:			 272
+	 xMax:			 892
+	 yMax:			 479
+
+	 EndPoints
+	 ---------
+	  0: 17
+
+	 Length of Instructions: 18
+
+	 Flags
+	 -----
+	  0:                                        On
+	  1:                        Y-Short X-Short On
+	  2: YDual                          X-Short Off
+	  3:                        Y-Short X-Short On
+	  4:                        Y-Short X-Short Off
+	  5:                        Y-Short X-Short On
+	  6: YDual                  Y-Short X-Short On
+	  7:        XDual           Y-Short X-Short Off
+	  8: YDual  XDual                   X-Short On
+	  9: YDual  XDual                   X-Short Off
+	 10: YDual  XDual           Y-Short X-Short Off
+	 11: YDual  XDual                   X-Short On
+	 12: YDual                  Y-Short X-Short Off
+	 13: YDual                  Y-Short X-Short On
+	 14: YDual  XDual           Y-Short X-Short On
+	 15:                        Y-Short X-Short Off
+	 16:        XDual           Y-Short         On
+	 17: YDual  XDual                   X-Short Off
+
+	 Coordinates
+	 -----------
+	  0 Rel (    892,    394) -> Abs (    892,    394)
+	  1 Rel (    -37,    -95) -> Abs (    855,    299)
+	  2 Rel (   -217,      0) -> Abs (    638,    299)
+	  3 Rel (   -190,     -7) -> Abs (    448,    292)
+	  4 Rel (   -233,     -9) -> Abs (    215,    283)
+	  5 Rel (    -81,    -11) -> Abs (    134,    272)
+	  6 Rel (    -41,     84) -> Abs (     93,    356)
+	  7 Rel (     67,    -10) -> Abs (    160,    346)
+	  8 Rel (    115,      0) -> Abs (    275,    346)
+	  9 Rel (     31,      0) -> Abs (    306,    346)
+	 10 Rel (    122,      2) -> Abs (    428,    348)
+	 11 Rel (     31,      0) -> Abs (    459,    348)
+	 12 Rel (    -10,     85) -> Abs (    449,    433)
+	 13 Rel (     -6,     18) -> Abs (    443,    451)
+	 14 Rel (    109,     28) -> Abs (    552,    479)
+	 15 Rel (    -13,    -91) -> Abs (    539,    388)
+	 16 Rel (      0,    -37) -> Abs (    539,    351)
+	 17 Rel (    168,      0) -> Abs (    707,    351)
+
