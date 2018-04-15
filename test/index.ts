@@ -23,7 +23,7 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 (async () => {
-  const buf = await readFile(path.resolve(__dirname, "王羲之书法字体.ttf"));
+  const buf = await readFile(path.resolve(__dirname, "方正瘦金书简体.ttf"));
 
   performance.mark("font.satisfy.begin");
   const font = new Font(buf);
@@ -53,7 +53,7 @@ const writeFile = promisify(fs.writeFile);
   console.log(post);
 
   const mini = new Minifier();
-  const newFont = mini.filter(font, "王羲之书法字体");
+  const newFont = mini.filter(font, "方正瘦金书简体");
   console.log(newFont);
 
   const f = path.resolve(__dirname, "..", "..", "test", `test.ttf`);
