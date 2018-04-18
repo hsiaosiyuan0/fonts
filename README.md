@@ -1,14 +1,16 @@
-# Fonts
+# font-toolkit
 
 Font file manipulating in typescript.
 
 [demo](http://fonts.hsiaosiyuan.com/)
 
-## Hot to use
+## Install
 
 ```bash
 npm install font-toolkit
 ```
+
+## Usage
 
 ```js
 const util = require("util");
