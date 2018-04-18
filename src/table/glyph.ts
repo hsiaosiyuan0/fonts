@@ -186,6 +186,8 @@ export class Glyph {
   simpleGlyphTable: SimpleGlyphTable;
   compositeGlyphTables: CompositeGlyphTable[] = [];
 
+  id?: number;
+
   size() {
     let size = kSizeofUInt16 * 5;
     if (this.numberOfContours > 0) {

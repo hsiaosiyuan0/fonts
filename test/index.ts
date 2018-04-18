@@ -1,29 +1,30 @@
+// tslint:disable:no-implicit-dependencies
 import * as fs from "fs";
 import * as path from "path";
-// tslint:disable-next-line:no-implicit-dependencies
 import { performance } from "perf_hooks";
 import { promisify } from "util";
 import {
+  BufferWriter,
   CmapTable,
   Font,
   GlyphTable,
+  GsubTable,
   HeadTable,
   HheaTable,
   HmtxTable,
   LocaTable,
   MaxpTable,
+  Minifier,
   NameTable,
   PostTable,
-  TableTag,
-  BufferWriter,
-  Minifier
+  TableTag
 } from "../src";
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 (async () => {
-  const buf = await readFile(path.resolve(__dirname, "方正瘦金书简体.ttf"));
+  const buf = await readFile(path.resolve(__dirname, "颜真卿书法字体.ttf"));
 
   performance.mark("font.satisfy.begin");
   const font = new Font(buf);
@@ -52,8 +53,8 @@ const writeFile = promisify(fs.writeFile);
   const post = font.tables.get(TableTag.post)!.as<PostTable>();
   console.log(post);
 
-  const mini = new Minifier();
-  const newFont = mini.filter(font, "方正瘦金书简体");
+  const mini = new Minifier(font);
+  const newFont = mini.with("王羲之书法字体");
   console.log(newFont);
 
   const f = path.resolve(__dirname, "..", "..", "test", `test.ttf`);

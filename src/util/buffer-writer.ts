@@ -1,3 +1,4 @@
+import * as assert from "assert";
 import * as bigInt from "big-integer";
 import * as os from "os";
 import {
@@ -12,11 +13,27 @@ import {
   uint8
 } from "../types";
 
+export class WriteGuard {
+  begin: number = 0;
+  end: number = 0;
+  match: number = 0;
+
+  get actual() {
+    return this.end - this.begin;
+  }
+
+  isMatch() {
+    return this.actual === this.match;
+  }
+}
+
 export class BufferWriter {
   protected _cap: number;
   protected _len: number;
 
   protected _wb: Buffer;
+
+  protected _writeGuards: WriteGuard[] = [];
 
   get capacity() {
     return this._cap;
@@ -99,5 +116,19 @@ export class BufferWriter {
     const s = n.and("0xffffffff").toJSNumber();
     this.writeInt32(f);
     this.writeUInt32(s);
+  }
+
+  pushWriteGuard(match: number) {
+    const g = new WriteGuard();
+    g.begin = this._len;
+    g.match = match;
+    this._writeGuards.push(g);
+  }
+
+  applyWriteGuard() {
+    const g = this._writeGuards.pop();
+    if (!g) throw new Error("balanced guard calling");
+    g.end = this._len;
+    assert.ok(g.isMatch(), `guard not match except ${g.match} got ${g.actual}`);
   }
 }

@@ -14,6 +14,19 @@ export const tagName2Code = (name: string) => {
   );
 };
 
+export const tagCode2Name = (code: uint32) => {
+  const c1 = code >> 24;
+  const c2 = (code >> 16) & 0xff;
+  const c3 = (code >> 8) & 0xff;
+  const c4 = code & 0xff;
+  return (
+    String.fromCharCode(c1) +
+    String.fromCharCode(c2) +
+    String.fromCharCode(c3) +
+    String.fromCharCode(c4)
+  );
+};
+
 export enum TableTag {
   raw = tagName2Code("raw"),
   cmap = tagName2Code("cmap"),
@@ -30,8 +43,27 @@ export enum TableTag {
   hdmx = tagName2Code("hdmx"),
   kern = tagName2Code("kern"),
   OS2 = tagName2Code("OS/2"),
-  prep = tagName2Code("prep")
+  prep = tagName2Code("prep"),
+  GSUB = tagName2Code("GSUB")
 }
+
+export const kTTFRequiredTags = [
+  TableTag.cmap,
+  TableTag.glyf,
+  TableTag.head,
+  TableTag.hhea,
+  TableTag.hmtx,
+  TableTag.loca,
+  TableTag.maxp,
+  TableTag.name,
+  TableTag.post,
+  TableTag.cvt,
+  TableTag.fpgm,
+  TableTag.hdmx,
+  TableTag.kern,
+  TableTag.OS2,
+  TableTag.prep
+];
 
 export const tableRecordParseOrder = new Map<TableTag, number>();
 tableRecordParseOrder.set(TableTag.name, 1);
@@ -64,16 +96,7 @@ export class TableRecord {
   }
 
   get tagName() {
-    const c1 = this.tag >> 24;
-    const c2 = (this.tag >> 16) & 0xff;
-    const c3 = (this.tag >> 8) & 0xff;
-    const c4 = this.tag & 0xff;
-    return (
-      String.fromCharCode(c1) +
-      String.fromCharCode(c2) +
-      String.fromCharCode(c3) +
-      String.fromCharCode(c4)
-    );
+    return tagCode2Name(this.tag);
   }
 
   static kSize = kSizeofUInt32 * 4;

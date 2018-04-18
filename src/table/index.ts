@@ -8,3 +8,4 @@ export * from "./loca";
 export * from "./hhea";
 export * from "./hmtx";
 export * from "./post";
+export * from "./gsub";

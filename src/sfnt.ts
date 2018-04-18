@@ -15,10 +15,12 @@ import {
   SubTableF12,
   Table,
   TableRecord,
-  TableTag
+  TableTag,
+  kTTFRequiredTags
 } from "./table";
 import { kSizeofUInt16, kSizeofUInt32, uint16, uint32, uint8 } from "./types";
 import { BufferWriter, ForwardBuffer } from "./util";
+import { GsubTable } from "./table/gsub";
 
 export class OffsetTable {
   sfntVersion: uint32;
@@ -125,16 +127,37 @@ export class Font {
     });
     tables.forEach(t => {
       const { tagName, offset, padding, length } = t.record;
-      const msg = `
-  tagName: ${tagName}
-  offset: ${offset}
-  padding: ${padding}
-  length: ${length}
-  wbLength: ${wb.length}
-  `;
-      assert.ok(t.record.offset === wb.length + t.record.padding, msg);
+      const msg = `tagName: ${tagName} offset: ${offset} padding: ${padding} length: ${length} wbLength: ${
+        wb.length
+      }`;
+      console.log(msg);
+      assert.ok(t.record.offset === wb.length + t.record.padding);
       t.write2(wb);
     });
+  }
+
+  addTable(table: Table) {
+    if (table instanceof CmapTable) {
+      this.tables.set(TableTag.cmap, table);
+    } else if (table instanceof GlyphTable) {
+      this.tables.set(TableTag.glyf, table);
+    } else if (table instanceof LocaTable) {
+      this.tables.set(TableTag.loca, table);
+    } else if (table instanceof MaxpTable) {
+      this.tables.set(TableTag.maxp, table);
+    } else if (table instanceof HmtxTable) {
+      this.tables.set(TableTag.hmtx, table);
+    } else if (table instanceof PostTable) {
+      this.tables.set(TableTag.post, table);
+    } else if (table instanceof HheaTable) {
+      this.tables.set(TableTag.hhea, table);
+    } else if (table instanceof HeadTable) {
+      this.tables.set(TableTag.head, table);
+    } else if (table instanceof GsubTable) {
+      this.tables.set(TableTag.GSUB, table);
+    } else if (table instanceof RawTable) {
+      this.rawTables.push(table);
+    }
   }
 
   private readOffsetTable() {
@@ -241,8 +264,12 @@ export class Font {
       }
       default:
         const t = new RawTable(r, this._rb.buffer, r.offset);
-        this.rawTables.push(t);
         t.satisfy();
+        if (kTTFRequiredTags.includes(r.tag)) {
+          this.tables.set(r.tag, t);
+        } else {
+          this.rawTables.push(t);
+        }
         break;
     }
   }

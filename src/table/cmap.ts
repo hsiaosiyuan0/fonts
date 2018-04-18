@@ -1,15 +1,17 @@
-import { ForwardBuffer, BufferWriter } from "../util";
 import {
   int16,
   kSizeofUInt16,
+  kSizeofUInt32,
+  kSizeofUInt8,
   uint16,
   uint24,
   uint32,
-  uint8,
-  kSizeofUInt32,
-  kSizeofUInt8
+  uint8
 } from "../types";
-import { Table, TableTag, repeat, TableRecord } from "./table";
+import { BufferWriter, ForwardBuffer } from "../util";
+import { Glyph, GlyphTable } from "./glyph";
+import { LocaTable } from "./loca";
+import { repeat, Table, TableRecord, TableTag } from "./table";
 
 export class EncodingRecord {
   platformId: uint16;
@@ -22,6 +24,32 @@ export class EncodingRecord {
     wb.writeUInt16(this.platformId);
     wb.writeUInt16(this.encodingID);
     wb.writeUInt32(this.offset);
+  }
+}
+
+export class CPGlyphInfo {
+  cp: number;
+  gIdx: number;
+  glyph: Glyph;
+  gsub: Glyph[] = [];
+}
+
+export class LookupResult {
+  cps: number[];
+  cpInfos: { [k: number]: CPGlyphInfo } = {};
+  aloneGlyphs: Glyph[] = [];
+  allGlyphIds: number[] = [];
+  allGlyphs: Glyph[] = [];
+  maxDepth = 0;
+
+  getCpInfo(cp: number, insert = false) {
+    let cpi = this.cpInfos[cp];
+    if (!cpi) {
+      cpi = new CPGlyphInfo();
+      cpi.cp = cp;
+      this.cpInfos[cp] = cpi;
+    }
+    return cpi;
   }
 }
 
@@ -67,6 +95,70 @@ export class CmapTable extends Table {
     });
     this.subTables.forEach(t => t.encoding.write2(wb));
     this.subTables.forEach(t => t.write2(wb));
+  }
+
+  lookupUnicode(cps: number[], glyf: GlyphTable, loca: LocaTable) {
+    let table: SubTable | null = null;
+    this.subTables.every(t => {
+      if (
+        t.encoding.platformId === 0 ||
+        (t.encoding.platformId === 3 && t.encoding.encodingID === 1)
+      ) {
+        table = t;
+        return false;
+      }
+      return true;
+    });
+    if (table === null) throw new Error("font does not support unicode");
+
+    const result = new LookupResult();
+    result.cps = cps;
+    result.cps.sort((a, b) => a - b);
+
+    cps.forEach(cp => {
+      const sid = table!.lookup(cp);
+      if (result.allGlyphIds.includes(sid)) return;
+
+      result.allGlyphIds.push(sid);
+      const rcp = result.getCpInfo(cp, true);
+      rcp.gIdx = sid;
+      rcp.glyph = glyf.readGlyphAt(sid, loca);
+      rcp.glyph.id = sid;
+    });
+
+    const recurveGlyph = (g: Glyph, ret: { depth: number }) => {
+      if (g.isSimple) return;
+      ++ret.depth;
+      g.compositeGlyphTables.forEach(cg => {
+        const sid = cg.glyphIndex;
+        const cgg = glyf.readGlyphAt(sid, loca);
+        cgg.id = sid;
+        if (!result.allGlyphIds.includes(sid)) {
+          result.allGlyphIds.push(sid);
+          result.aloneGlyphs.push(cgg);
+        }
+        if (!cgg.isSimple) {
+          recurveGlyph(g, ret);
+        }
+      });
+    };
+
+    Object.values(result.cpInfos).forEach(({ glyph: g }) => {
+      const ret = { depth: 0 };
+      if (!g.isSimple) recurveGlyph(g, ret);
+      result.maxDepth = Math.max(result.maxDepth, ret.depth);
+    });
+
+    let allGlyphs: Glyph[] = [];
+    result.cps.forEach(cp => {
+      const info = result.cpInfos[cp];
+      allGlyphs.push(info.glyph);
+      allGlyphs = allGlyphs.concat(info.gsub);
+    });
+    allGlyphs = allGlyphs.concat(result.aloneGlyphs);
+    result.allGlyphs = allGlyphs;
+
+    return result;
   }
 
   private readHead() {
@@ -367,14 +459,14 @@ export class SubTableF4 extends SubTable {
     return idx & 0xffff;
   }
 
-  static pack(data: Array<{ cp: number; gIdx: number }>) {
+  static pack(data: Array<{ cp: number; gId: number }>) {
     data.sort((a, b) => a.cp - b.cp);
     const t = new SubTableF4();
-    data.forEach(({ cp, gIdx }) => {
+    data.forEach(({ cp, gId }) => {
       t.endCount.push(cp);
       t.startCount.push(cp);
       t.idRangeOffset.push(0);
-      t.idDelta.push(0xffff & (gIdx - cp));
+      t.idDelta.push(0xffff & (gId - cp));
     });
 
     // last
