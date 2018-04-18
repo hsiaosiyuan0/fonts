@@ -130,7 +130,7 @@ export class BufferWriter {
 
   applyWriteGuard() {
     const g = this._writeGuards.pop();
-    if (!g) throw new Error("balanced guard calling");
+    if (!g) throw new Error("unbalanced guard calling");
     g.end = this._len;
     const title = g.title || "no-title";
     assert.ok(g.isMatch(), `[${title}] guard not match, except ${g.match}, got ${g.actual}`);
