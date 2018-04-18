@@ -54,7 +54,7 @@ const writeFile = promisify(fs.writeFile);
   console.log(post);
 
   const mini = new Minifier(font);
-  const newFont = mini.with("王羲之书法字体");
+  const newFont = mini.with("永和九年，岁在癸丑。暮春之初，会於会稽山阴之兰亭，修禊事也。");
   console.log(newFont);
 
   const f = path.resolve(__dirname, "..", "..", "test", `test.ttf`);

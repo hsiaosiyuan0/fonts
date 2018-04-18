@@ -35,7 +35,7 @@ export class CPGlyphInfo {
 }
 
 export class LookupResult {
-  cps: number[];
+  cps: number[] = [];
   cpInfos: { [k: number]: CPGlyphInfo } = {};
   aloneGlyphs: Glyph[] = [];
   allGlyphIds: number[] = [];
@@ -112,10 +112,16 @@ export class CmapTable extends Table {
     if (table === null) throw new Error("font does not support unicode");
 
     const result = new LookupResult();
-    result.cps = cps;
+    const uniqueCp: { [k: number]: boolean } = {};
+    cps.forEach(cp => {
+      if (uniqueCp[cp] !== true) {
+        result.cps.push(cp);
+        uniqueCp[cp] = true;
+      }
+    });
     result.cps.sort((a, b) => a - b);
 
-    cps.forEach(cp => {
+    result.cps.forEach(cp => {
       const sid = table!.lookup(cp);
       if (result.allGlyphIds.includes(sid)) return;
 
@@ -123,7 +129,6 @@ export class CmapTable extends Table {
       const rcp = result.getCpInfo(cp, true);
       rcp.gIdx = sid;
       rcp.glyph = glyf.readGlyphAt(sid, loca);
-      rcp.glyph.id = sid;
     });
 
     const recurveGlyph = (g: Glyph, ret: { depth: number }) => {
@@ -132,7 +137,6 @@ export class CmapTable extends Table {
       g.compositeGlyphTables.forEach(cg => {
         const sid = cg.glyphIndex;
         const cgg = glyf.readGlyphAt(sid, loca);
-        cgg.id = sid;
         if (!result.allGlyphIds.includes(sid)) {
           result.allGlyphIds.push(sid);
           result.aloneGlyphs.push(cgg);
@@ -150,13 +154,14 @@ export class CmapTable extends Table {
     });
 
     let allGlyphs: Glyph[] = [];
+    let gsub: Glyph[] = [];
     result.cps.forEach(cp => {
       const info = result.cpInfos[cp];
       allGlyphs.push(info.glyph);
-      allGlyphs = allGlyphs.concat(info.gsub);
+      gsub = gsub.concat(info.gsub);
     });
-    allGlyphs = allGlyphs.concat(result.aloneGlyphs);
-    result.allGlyphs = allGlyphs;
+    allGlyphs = allGlyphs.concat(gsub);
+    result.allGlyphs = allGlyphs.concat(result.aloneGlyphs);
 
     return result;
   }
