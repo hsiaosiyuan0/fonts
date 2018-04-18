@@ -115,7 +115,7 @@ export class Minifier {
     const cmap = new CmapTable();
     cmap.version = 0;
     cmap.numTables = 1;
-    const cpGidMap = lookupResult.cps.map((cp, i) => ({ cp, gId: i }));
+    const cpGidMap = lookupResult.cps.map(cp => ({ cp, gId: lookupResult.cpInfos[cp].newId }));
     const subTable = SubTableF4.pack(cpGidMap);
     subTable.encoding = new EncodingRecord();
     subTable.encoding.platformId = 0;
@@ -185,11 +185,11 @@ export class Minifier {
       post.glyphNameIndex = [];
       post.numGlyphs = lookupResult.allGlyphs.length;
       lookupResult.allGlyphIds.forEach(id => {
-        const name = post.getNameV20(id);
+        const name = this._post.getNameV20(id);
         if (typeof name === "number") {
           post.glyphNameIndex.push(name);
         } else {
-          post.glyphNameIndex.push(258 + id);
+          post.glyphNameIndex.push(258 + post.names.length);
           post.names.push(name);
         }
       });

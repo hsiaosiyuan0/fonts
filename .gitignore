@@ -26,3 +26,4 @@ yarn-error.log*
 *.class
 
 test/*dump.txt
+test/*.ttf

@@ -14,6 +14,8 @@ import {
 } from "../types";
 
 export class WriteGuard {
+  title?: string;
+
   begin: number = 0;
   end: number = 0;
   match: number = 0;
@@ -118,10 +120,11 @@ export class BufferWriter {
     this.writeUInt32(s);
   }
 
-  pushWriteGuard(match: number) {
+  pushWriteGuard(match: number, title?: string) {
     const g = new WriteGuard();
     g.begin = this._len;
     g.match = match;
+    g.title = title;
     this._writeGuards.push(g);
   }
 
@@ -129,6 +132,7 @@ export class BufferWriter {
     const g = this._writeGuards.pop();
     if (!g) throw new Error("balanced guard calling");
     g.end = this._len;
-    assert.ok(g.isMatch(), `guard not match except ${g.match} got ${g.actual}`);
+    const title = g.title || "no-title";
+    assert.ok(g.isMatch(), `[${title}] guard not match, except ${g.match}, got ${g.actual}`);
   }
 }

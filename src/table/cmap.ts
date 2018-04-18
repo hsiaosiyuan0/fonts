@@ -1,3 +1,4 @@
+import * as assert from "assert";
 import {
   int16,
   kSizeofUInt16,
@@ -29,9 +30,10 @@ export class EncodingRecord {
 
 export class CPGlyphInfo {
   cp: number;
-  gIdx: number;
+  gId: number;
   glyph: Glyph;
   gsub: Glyph[] = [];
+  newId: number;
 }
 
 export class LookupResult {
@@ -123,11 +125,11 @@ export class CmapTable extends Table {
 
     result.cps.forEach(cp => {
       const sid = table!.lookup(cp);
-      if (result.allGlyphIds.includes(sid)) return;
-
-      result.allGlyphIds.push(sid);
+      if (!result.allGlyphIds.includes(sid)) {
+        result.allGlyphIds.push(sid);
+      }
       const rcp = result.getCpInfo(cp, true);
-      rcp.gIdx = sid;
+      rcp.gId = sid;
       rcp.glyph = glyf.readGlyphAt(sid, loca);
     });
 
@@ -155,10 +157,17 @@ export class CmapTable extends Table {
 
     let allGlyphs: Glyph[] = [];
     let gsub: Glyph[] = [];
+    const cpNewId: { [k: number]: number } = {};
     result.cps.forEach(cp => {
       const info = result.cpInfos[cp];
-      allGlyphs.push(info.glyph);
-      gsub = gsub.concat(info.gsub);
+      if (cpNewId[info.gId] === undefined) {
+        cpNewId[info.gId] = allGlyphs.length;
+        info.newId = allGlyphs.length;
+        allGlyphs.push(info.glyph);
+        gsub = gsub.concat(info.gsub);
+      } else {
+        info.newId = cpNewId[info.gId];
+      }
     });
     allGlyphs = allGlyphs.concat(gsub);
     result.allGlyphs = allGlyphs.concat(result.aloneGlyphs);

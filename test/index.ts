@@ -24,7 +24,7 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 (async () => {
-  const buf = await readFile(path.resolve(__dirname, "颜真卿书法字体.ttf"));
+  const buf = await readFile(path.resolve(__dirname, "汉仪南宫体简.ttf"));
 
   performance.mark("font.satisfy.begin");
   const font = new Font(buf);

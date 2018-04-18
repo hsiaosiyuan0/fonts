@@ -126,13 +126,9 @@ export class Font {
       t.record.write2(wb);
     });
     tables.forEach(t => {
-      const { tagName, offset, padding, length } = t.record;
-      const msg = `tagName: ${tagName} offset: ${offset} padding: ${padding} length: ${length} wbLength: ${
-        wb.length
-      }`;
-      console.log(msg);
-      assert.ok(t.record.offset === wb.length + t.record.padding);
+      wb.pushWriteGuard(t.size() + t.record.padding, `write table ` + t.record.tagName);
       t.write2(wb);
+      wb.applyWriteGuard();
     });
   }
 
