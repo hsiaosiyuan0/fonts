@@ -2,7 +2,7 @@
 
 Font file manipulating in typescript.
 
-[demo](http://fonts.hsiaosiyuan.com/)
+[demo](http://fonts.thehardways.me/)
 
 ## Install
 
